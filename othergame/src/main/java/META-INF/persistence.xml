@@ -8,7 +8,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     <description> Crud básico Hibernate JPA</description>
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     
-    <class>com.comweb.model.User</class>
+    <class>com.comweb.model.Users</class>
 
     <properties>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />

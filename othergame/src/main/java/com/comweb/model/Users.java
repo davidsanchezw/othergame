@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Users")
-public class User implements java.io.Serializable {
+public class Users implements java.io.Serializable {
 	/**
 	 *
 	 */

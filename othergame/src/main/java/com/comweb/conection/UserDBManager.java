@@ -1,10 +1,12 @@
 package com.comweb.conection;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
-import com.comweb.model.User;
+import com.comweb.model.Users;
 
 public class UserDBManager {
 
@@ -20,15 +22,22 @@ public class UserDBManager {
 	 * @param email The email from user to check.
 	 * @return The number of id, or 0 if the email and pass does not match.
 	 */
-	public int checkLogin(String email, String password) throws SQLException {
-		User user = entity.find(User.class, 2);
+	public Users checkLogin(String email, String pass) throws SQLException {
 		/*
 		 * String query = "SELECT id " + "FROM Users " + "WHERE email = ? AND pass = ?";
-		 * try (PreparedStatement stmt = connection.prepareStatement(query)) {
+		 * } try (PreparedStatement stmt = connection.prepareStatement(query)) {
 		 * stmt.setString(1, email); stmt.setString(2, password); ResultSet rs =
 		 * stmt.executeQuery(); if (rs.next()) { return rs.getInt("id"); } }
 		 */
-		return user.getId();
+		Query query = entity.createQuery("SELECT u FROM Users u WHERE u.email = :email AND pass = :pass", Users.class);
+		query.setParameter("email", email);
+		query.setParameter("pass", pass);
+		List<Users> results = query.getResultList();
+		if (results.isEmpty())
+			return null;
+		else
+			return (Users) results.get(0);
+
 	}
 
 	/**
@@ -38,7 +47,7 @@ public class UserDBManager {
 	 * @return The User object, or null if not found.
 	 * @throws SQLException If somthing fails with the DB.
 	 */
-	public User userInfo(int id) throws SQLException {
+	public Users userInfo(int id) throws SQLException {
 		/*
 		 * String query = "SELECT publicName, explanation " + "FROM Users " +
 		 * "WHERE id = ?"; try (PreparedStatement stmt =
