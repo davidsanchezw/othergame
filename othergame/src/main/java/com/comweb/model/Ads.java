@@ -16,10 +16,23 @@ import javax.persistence.Table;
 @Table(name = "Ads")
 public class Ads implements java.io.Serializable {
 
+	public Ads() {
+	}
+
+	public Ads(String nameAd, String explanation, Date datePublished, Date dateEnd, StatusItemTxt statusItemTxt,
+			StatusPostTxt statusPostTxt) {
+		super();
+		this.nameAd = nameAd;
+		this.explanation = explanation;
+		this.datePublished = datePublished;
+		this.dateEnd = dateEnd;
+		this.statusItemTxt = statusItemTxt;
+		this.statusPostTxt = statusPostTxt;
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
-
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
@@ -33,14 +46,14 @@ public class Ads implements java.io.Serializable {
 	private Date datePublished;
 
 	@Column
-	private int statusPostNumber;
-
-	@Column
 	private Date dateEnd;
 
 	@OneToOne
+	@JoinColumn(name = "statusItemNumber")
+	private StatusItemTxt statusItemTxt;
 
-	@JoinColumn(name = "id")
+	@OneToOne
+	@JoinColumn(name = "statusPostNumber")
 	private StatusPostTxt statusPostTxt;
 
 	public Integer getId() {
@@ -67,6 +80,10 @@ public class Ads implements java.io.Serializable {
 		this.explanation = explanation;
 	}
 
+	public String getStatusItemTxt() {
+		return statusItemTxt.getTxt();
+	}
+
 	public String getStatusPostTxt() {
 		return statusPostTxt.getTxt();
 	}
@@ -77,14 +94,6 @@ public class Ads implements java.io.Serializable {
 
 	public void setDatePublished(Date datePublished) {
 		this.datePublished = datePublished;
-	}
-
-	public int getStatusPostNumber() {
-		return statusPostNumber;
-	}
-
-	public void setStatusPostNumber(int statusPostNumber) {
-		this.statusPostNumber = statusPostNumber;
 	}
 
 	public Date getDateEnd() {
@@ -98,7 +107,8 @@ public class Ads implements java.io.Serializable {
 	@Override
 	public String toString() {
 		return "Ads [id=" + id + ", nameAd=" + nameAd + ", explanation=" + explanation + ", datePublished="
-				+ datePublished + ", statusPostNumber=" + statusPostNumber + ", dateEnd=" + dateEnd + ", statusPostTxt="
-				+ statusPostTxt.getTxt() + "]";
+				+ datePublished + ", dateEnd=" + dateEnd + ", statusItemTxt=" + statusItemTxt.getTxt()
+				+ ", statusPostTxt=" + statusPostTxt.getTxt() + "]";
 	}
+
 }

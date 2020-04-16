@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
  * no devuelve a index
  *
  */
-@WebServlet("/registro")
-public class Registro extends HttpServlet {
+@WebServlet("/register")
+public class Register extends HttpServlet {
 	/**
 	 * 
 	 */

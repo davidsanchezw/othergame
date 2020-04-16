@@ -38,7 +38,7 @@ if (ads.size() < 1) {
 %>
 <% } %>
 
-
+    <input type="button" onclick=" window.location.href='publish' " value="Publicar un anuncio ">
     <input type="button" onclick=" window.location.href='logout' " value="Cerrar sesión ">
 
 </body>
