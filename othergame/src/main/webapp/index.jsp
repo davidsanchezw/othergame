@@ -19,9 +19,9 @@
     <input type="password" placeholder="Enter Password" name="psw" required>
         
     <button type="submit">Login</button>
-    <button type="button" onclick="alert('Registro')">Registrarse</button>
   </div>
-
 </form>
-
+<form action="registro" method="post">
+    <button type="submit">Registrarse</button>
+</form>
 </body>

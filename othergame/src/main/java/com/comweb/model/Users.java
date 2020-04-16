@@ -10,6 +10,17 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Users")
 public class Users implements java.io.Serializable {
+	public Users() {
+	}
+
+	public Users(String email, String pass, String publicName, String explanation) {
+		super();
+		this.email = email;
+		this.pass = pass;
+		this.publicName = publicName;
+		this.explanation = explanation;
+	}
+
 	/**
 	 *
 	 */
@@ -21,7 +32,7 @@ public class Users implements java.io.Serializable {
 	@Column
 	private String email;
 	@Column
-	private String password;
+	private String pass;
 	@Column
 	private String publicName;
 	@Column
@@ -35,12 +46,12 @@ public class Users implements java.io.Serializable {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getPass() {
+		return pass;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPass(String pass) {
+		this.pass = pass;
 	}
 
 	public String getPublicName() {
@@ -69,7 +80,7 @@ public class Users implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "User [explanation=" + explanation + ", email=" + email + ", id=" + id + ", password=" + password
+		return "User [explanation=" + explanation + ", email=" + email + ", id=" + id + ", pass=" + pass
 				+ ", publicName=" + publicName + "]";
 	}
 
