@@ -17,6 +17,7 @@ import com.comweb.conection.DBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.StatusItemTxt;
 import com.comweb.model.StatusPostTxt;
+import com.comweb.model.Users;
 
 @WebServlet("/createAd")
 public class CreateAd extends HttpServlet {
@@ -29,34 +30,39 @@ public class CreateAd extends HttpServlet {
 
 		HttpSession session = request.getSession();
 
-		try (DBManager db = new DBManager()) {
-			AdDBManager adDb = new AdDBManager(db);
-			// obtiene los parametros para autenticar
-			String nameAd = request.getParameter("name");
-			String explanation = request.getParameter("desc");
-			int statusItemNumber = Integer.parseInt(request.getParameter("status"));
-			StatusItemTxt statusItemTxt = adDb.getstatusItemTxt(statusItemNumber);
-			int statusPostNumber = 1;
-			StatusPostTxt statusPostTxt = adDb.getstatusPostTxt(statusPostNumber);
-			Date date = new Date();
+		Users me = (Users) session.getAttribute("me");
+		if (me == null) {
+			response.sendRedirect("index.jsp");
+		} else {
+			try (DBManager db = new DBManager()) {
+				AdDBManager adDb = new AdDBManager(db);
+				// obtiene los parametros para autenticar
+				String nameAd = request.getParameter("name");
+				String explanation = request.getParameter("desc");
+				int statusItemNumber = Integer.parseInt(request.getParameter("status"));
+				StatusItemTxt statusItemTxt = adDb.getstatusItemTxt(statusItemNumber);
+				int statusPostNumber = 1;
+				StatusPostTxt statusPostTxt = adDb.getstatusPostTxt(statusPostNumber);
+				Date date = new Date();
 
-			Ads ad = new Ads(nameAd, explanation, date, null, statusItemTxt, statusPostTxt);
+				Ads ad = new Ads(nameAd, explanation, date, null, statusItemTxt, statusPostTxt, me);
 
-			// Buscar en base de datos al usuario con dicho email y contraseña
+				// Buscar en base de datos al usuario con dicho email y contraseña
 
-			System.out.println("id = 0");
+				System.out.println("id = 0");
 
-			int id = adDb.createAd(ad);
-			System.out.println("id = " + id);
-			Ads singleAd = adDb.getAd(id);
-			request.setAttribute("singleAd", singleAd);
-			RequestDispatcher rd = request.getRequestDispatcher("singleAd.jsp");
-			rd.forward(request, response);
+				int id = adDb.createAd(ad);
+				System.out.println("id = " + id);
+				Ads singleAd = adDb.getAd(id);
+				request.setAttribute("singleAd", singleAd);
+				RequestDispatcher rd = request.getRequestDispatcher("singleAd.jsp");
+				rd.forward(request, response);
 
 //NamingException
-		} catch (SQLException e) {
-			e.printStackTrace();
-			response.sendError(500);
+			} catch (SQLException e) {
+				e.printStackTrace();
+				response.sendError(500);
+			}
 		}
 	}
 

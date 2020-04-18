@@ -1,10 +1,15 @@
 package com.comweb.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -37,6 +42,9 @@ public class Users implements java.io.Serializable {
 	private String publicName;
 	@Column
 	private String explanation;
+
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER) // TO DO: deberia cambiarse a LAZY
+	private List<Ads> ads = new ArrayList<>();
 
 	public String getEmail() {
 		return email;
@@ -82,6 +90,10 @@ public class Users implements java.io.Serializable {
 	public String toString() {
 		return "User [explanation=" + explanation + ", email=" + email + ", id=" + id + ", pass=" + pass
 				+ ", publicName=" + publicName + "]";
+	}
+
+	public List<Ads> getAds() {
+		return ads;
 	}
 
 }

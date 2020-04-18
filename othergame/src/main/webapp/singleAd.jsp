@@ -12,6 +12,7 @@
 <h1>Anuncio</h1>
         <% Ads singleAd = (Ads)request.getAttribute("singleAd"); %>
         <p><%= singleAd.toString()  %></p>
+        
             <input type="button" onclick=" window.location.href='principal' " value="Principal">
         
 

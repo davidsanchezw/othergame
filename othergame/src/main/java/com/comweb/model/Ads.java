@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -20,7 +21,7 @@ public class Ads implements java.io.Serializable {
 	}
 
 	public Ads(String nameAd, String explanation, Date datePublished, Date dateEnd, StatusItemTxt statusItemTxt,
-			StatusPostTxt statusPostTxt) {
+			StatusPostTxt statusPostTxt, Users user) {
 		super();
 		this.nameAd = nameAd;
 		this.explanation = explanation;
@@ -28,6 +29,7 @@ public class Ads implements java.io.Serializable {
 		this.dateEnd = dateEnd;
 		this.statusItemTxt = statusItemTxt;
 		this.statusPostTxt = statusPostTxt;
+		this.user = user;
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -55,6 +57,10 @@ public class Ads implements java.io.Serializable {
 	@OneToOne
 	@JoinColumn(name = "statusPostNumber")
 	private StatusPostTxt statusPostTxt;
+
+	@ManyToOne
+	@JoinColumn(name = "user")
+	private Users user;
 
 	public Integer getId() {
 		return id;
@@ -108,7 +114,11 @@ public class Ads implements java.io.Serializable {
 	public String toString() {
 		return "Ads [id=" + id + ", nameAd=" + nameAd + ", explanation=" + explanation + ", datePublished="
 				+ datePublished + ", dateEnd=" + dateEnd + ", statusItemTxt=" + statusItemTxt.getTxt()
-				+ ", statusPostTxt=" + statusPostTxt.getTxt() + "]";
+				+ ", statusPostTxt=" + statusPostTxt.getTxt() + user.toString() + "]";
+	}
+
+	public Users getUser() {
+		return user;
 	}
 
 }
