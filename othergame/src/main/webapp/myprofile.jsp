@@ -11,7 +11,7 @@
 <body>
 <h1>Mi perfil de usuario</h1>
 <% 
-Users me = (Users)session.getAttribute("me");
+Users me = (Users)request.getAttribute("me");
  %>
 <p><%= 
 me.toString()
@@ -19,7 +19,7 @@ me.toString()
 
 
     <% 
-List<Ads> ads = me.getAds(); 
+List<Ads> ads = (List<Ads>)request.getAttribute("ads"); 
 if (ads.size() < 1) {
 %>
     <p>No hay anuncios disponibles</p>

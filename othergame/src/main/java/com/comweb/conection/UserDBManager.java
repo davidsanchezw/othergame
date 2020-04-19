@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.comweb.model.Ads;
 import com.comweb.model.Users;
 
 public class UserDBManager {
@@ -73,6 +74,23 @@ public class UserDBManager {
 	public Users getUser(int id) throws SQLException {
 
 		return entity.find(Users.class, id);
+	}
+
+	/**
+	 * Search user by Id.
+	 *
+	 * @param id The id of the user.
+	 * @return The User object, or null if not found.
+	 * @throws SQLException If somthing fails with the DB.
+	 */
+	public List<Ads> getAdsUser(int id) throws SQLException {
+		entity.getTransaction().begin();
+		Users user = entity.find(Users.class, id);
+		List<Ads> ads = user.getAds();
+		ads.size();
+		entity.getTransaction().commit();
+		return ads;
+
 	}
 
 }
