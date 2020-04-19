@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.comweb.model.Ads;
+import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
 public class UserDBManager {
@@ -90,6 +91,16 @@ public class UserDBManager {
 		ads.size();
 		entity.getTransaction().commit();
 		return ads;
+
+	}
+
+	public List<Matches> getMatchesFirstUser(int id) throws SQLException {
+		entity.getTransaction().begin();
+		Users user = entity.find(Users.class, id);
+		List<Matches> matches = user.getMatchesFirst();
+		matches.size();
+		entity.getTransaction().commit();
+		return matches;
 
 	}
 

@@ -13,6 +13,11 @@
 <% 
 Users me = (Users)request.getAttribute("me");
  %>
+ 			<form action="matchesView" method="get">
+					 <input type="hidden" name="idUser" value=<%= me.getId() %> />
+					 <input type="submit" value="Propuestas" />
+				</form> 
+ 
 <p><%= 
 me.toString()
 %></p>
@@ -35,7 +40,8 @@ if (ads.size() < 1) {
 					 <input type="hidden" name="idAd" value=<%= ad.getId() %> />
 					 <p><%= ad.toString() %></p>
 					 <input type="submit" value="Ver" />
-				</form>             </div>
+				</form>             
+				</div>
             <% 
     }
 %>

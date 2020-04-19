@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import com.comweb.model.Ads;
 import com.comweb.model.StatusItemTxt;
 import com.comweb.model.StatusPostTxt;
+import com.comweb.model.Users;
 
 public class AdDBManager {
 
@@ -58,6 +59,23 @@ public class AdDBManager {
 
 	public StatusPostTxt getstatusPostTxt(int id) {
 		return entity.find(StatusPostTxt.class, id);
+	}
+
+	/**
+	 * Search user by Id.
+	 *
+	 * @param id The id of the user.
+	 * @return The User object, or null if not found.
+	 * @throws SQLException If somthing fails with the DB.
+	 */
+	public Users getUserAd(int id) throws SQLException {
+		entity.getTransaction().begin();
+		Ads ad = entity.find(Ads.class, id);
+		Users user = ad.getUser();
+		user.getId();
+		entity.getTransaction().commit();
+		return user;
+
 	}
 
 }

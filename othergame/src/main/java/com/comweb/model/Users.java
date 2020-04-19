@@ -45,6 +45,12 @@ public class Users implements java.io.Serializable {
 	@OneToMany(mappedBy = "user")
 	private List<Ads> ads = new ArrayList<>();
 
+	@OneToMany(mappedBy = "usr1")
+	private List<Matches> matchesFirst = new ArrayList<>();
+
+	@OneToMany(mappedBy = "usr2")
+	private List<Matches> matchesSecond = new ArrayList<>();
+
 	public String getEmail() {
 		return email;
 	}
@@ -95,8 +101,11 @@ public class Users implements java.io.Serializable {
 		return ads;
 	}
 
-	public void setAds(List<Ads> ads) {
-		this.ads = ads;
+	public List<Matches> getMatchesFirst() {
+		return matchesFirst;
 	}
 
+	public List<Matches> getMatchesSecond() {
+		return matchesSecond;
+	}
 }

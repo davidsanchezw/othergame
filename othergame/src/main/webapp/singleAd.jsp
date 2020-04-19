@@ -11,8 +11,14 @@
 <body>
 <h1>Anuncio</h1>
         <% Ads singleAd = (Ads)request.getAttribute("singleAd"); %>
-        <p><%= singleAd.toString()  %></p>
         
+        <div>
+	            <form action="createMatch" method="get">
+					 <input type="hidden" name="idAd" value=<%= singleAd.getId() %> />
+					 <p><%= singleAd.toString() %></p>
+					 <input type="submit" value="Proponer intercambio" />
+				</form>                
+            </div>
             <input type="button" onclick=" window.location.href='principal' " value="Principal">
         
 
