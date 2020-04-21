@@ -1,7 +1,6 @@
 package com.comweb.controllers;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.comweb.conection.DBManager;
-import com.comweb.conection.UserDBManager;
-import com.comweb.model.Ads;
+import com.comweb.conection.MatchDBManager;
+import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
-@WebServlet("/myprofile")
-public class MyProfile extends HttpServlet {
+@WebServlet("/singleMatch")
+public class SingleMatch extends HttpServlet {
 	/**
 	 * 
 	 */
@@ -34,19 +33,16 @@ public class MyProfile extends HttpServlet {
 		} else {
 
 			try (DBManager db = new DBManager()) {
-				UserDBManager userDb = new UserDBManager(db);
-				System.out.println("prueba0");
-				Users user = userDb.getUser(me.getId());
-				System.out.println("prueba1");
-				List<Ads> ads = userDb.getAdsUser(user.getId());
-				System.out.println(ads);
-				request.setAttribute("ads", ads);
+				MatchDBManager matchDb = new MatchDBManager(db);
+				int idMatch = Integer.parseInt(request.getParameter("idMatch"));
+				Matches singleMatch = matchDb.getMatch(idMatch);
+				request.setAttribute("singleMatch", singleMatch);
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
 			}
 
-			RequestDispatcher rd = request.getRequestDispatcher("myprofile.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("singleMatch.jsp");
 			rd.forward(request, response);
 		}
 	}

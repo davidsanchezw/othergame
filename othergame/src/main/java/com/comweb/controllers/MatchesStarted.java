@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.comweb.conection.DBManager;
-import com.comweb.conection.UserDBManager;
-import com.comweb.model.Ads;
+import com.comweb.conection.MatchDBManager;
+import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
-@WebServlet("/myprofile")
-public class MyProfile extends HttpServlet {
+@WebServlet("/matchesStarted")
+public class MatchesStarted extends HttpServlet {
 	/**
 	 * 
 	 */
@@ -34,19 +34,19 @@ public class MyProfile extends HttpServlet {
 		} else {
 
 			try (DBManager db = new DBManager()) {
-				UserDBManager userDb = new UserDBManager(db);
+				MatchDBManager matchDb = new MatchDBManager(db);
+				int usr1 = me.getId();
 				System.out.println("prueba0");
-				Users user = userDb.getUser(me.getId());
-				System.out.println("prueba1");
-				List<Ads> ads = userDb.getAdsUser(user.getId());
-				System.out.println(ads);
-				request.setAttribute("ads", ads);
+				List<Matches> matches = (List<Matches>) matchDb.getFirstMatch(usr1, 1);
+				request.setAttribute("matches", matches);
+				request.setAttribute("title", "Propuestas iniciadas");
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
 			}
 
-			RequestDispatcher rd = request.getRequestDispatcher("myprofile.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("matchesView.jsp");
 			rd.forward(request, response);
 		}
 	}

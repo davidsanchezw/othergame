@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.comweb.conection.DBManager;
-import com.comweb.conection.UserDBManager;
+import com.comweb.conection.MatchDBManager;
 import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
-@WebServlet("/matchesView")
-public class MatchesView extends HttpServlet {
+@WebServlet("/matchesPendingMe")
+public class MatchesPendingMe extends HttpServlet {
 	/**
 	 * 
 	 */
@@ -34,17 +34,19 @@ public class MatchesView extends HttpServlet {
 		} else {
 
 			try (DBManager db = new DBManager()) {
-				UserDBManager userDb = new UserDBManager(db);
-				int idUser = Integer.parseInt(request.getParameter("idUser"));
+				MatchDBManager matchDb = new MatchDBManager(db);
+				int usr1 = me.getId();
 				System.out.println("prueba0");
-				List<Matches> matches = (List<Matches>) userDb.getMatchesFirstUser(idUser);
+				List<Matches> matches = (List<Matches>) matchDb.getSecondMatch(usr1, 2);
 				request.setAttribute("matches", matches);
+				request.setAttribute("title", "Propuestas pendientes de mi");
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
 			}
 
-			RequestDispatcher rd = request.getRequestDispatcher("matches.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("matchesView.jsp");
 			rd.forward(request, response);
 		}
 	}

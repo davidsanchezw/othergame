@@ -1,4 +1,5 @@
 <%@ page language='java' contentType='text/html;charset=utf-8'%>
+<%@ page import='com.comweb.model.StatusMatchTxt' %>
 <%@ page import='com.comweb.model.Matches' %>
 <%@ page import='com.comweb.model.Users' %>
 <%@ page import='com.comweb.model.Ads' %>
@@ -10,7 +11,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h1>Propuestas</h1>
+<input type="button" onclick=" window.location.href='myprofile' " value="Mi perfil">
+    <input type="button" onclick=" window.location.href='principal' " value="Principal">
+    <input type="button" onclick=" window.location.href='logout' " value="Cerrar sesión ">
+<h1><%=request.getAttribute("title") %></h1>
    <% 
 List<Matches> matches = (List<Matches>)request.getAttribute("matches");
 if (matches.size() < 1) {
@@ -33,10 +37,7 @@ if (matches.size() < 1) {
             <% 
     }
 %>
-<% } %>
-
-    <input type="button" onclick=" window.location.href='principal' " value="Principal">
-    <input type="button" onclick=" window.location.href='logout' " value="Cerrar sesión ">
+<% } %>   
 
 </body>
 </html>

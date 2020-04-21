@@ -1,8 +1,10 @@
 package com.comweb.conection;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import com.comweb.model.Matches;
 import com.comweb.model.StatusMatchTxt;
@@ -40,6 +42,44 @@ public class MatchDBManager {
 
 	public StatusMatchTxt getstatusMatchTxt(int id) {
 		return entity.find(StatusMatchTxt.class, id);
+	}
+
+	public List<Matches> getFirstMatch(int usr1, int statusMatchNumber) throws SQLException { // A
+		entity.getTransaction().begin();
+		Query query = entity.createQuery(
+				"SELECT m FROM Matches m WHERE m.usr1.id = :usr1 AND m.statusMatchTxt.id = :statusMatchNumber",
+				Matches.class);
+		query.setParameter("usr1", usr1);
+		query.setParameter("statusMatchNumber", statusMatchNumber);
+		List<Matches> matches = (List<Matches>) query.getResultList();
+		entity.getTransaction().commit();
+		return matches;
+	}
+
+	public List<Matches> getSecondMatch(int usr2, int statusMatchNumber) throws SQLException {
+		entity.getTransaction().begin();
+		Query query = entity.createQuery(
+				"SELECT m FROM Matches m WHERE m.usr2.id = :usr2 AND m.statusMatchTxt.id = :statusMatchNumber",
+				Matches.class);
+		query.setParameter("usr2", usr2);
+		query.setParameter("statusMatchNumber", statusMatchNumber);
+		List<Matches> matches = (List<Matches>) query.getResultList();
+		entity.getTransaction().commit();
+		return matches;
+	}
+
+	public List<Matches> getEndedMatch(int usr, int statusMatchNumber) throws SQLException {
+		entity.getTransaction().begin();
+		Query query = entity.createQuery(
+				"SELECT m FROM Matches m WHERE (m.usr1.id = :usr1 OR m.usr2.id = :usr2) AND m.statusMatchTxt.id = :statusMatchNumber",
+				Matches.class);
+		query.setParameter("usr1", usr);
+		query.setParameter("usr2", usr);
+		query.setParameter("statusMatchNumber", statusMatchNumber);
+
+		List<Matches> matches = (List<Matches>) query.getResultList();
+		entity.getTransaction().commit();
+		return matches;
 	}
 
 }
