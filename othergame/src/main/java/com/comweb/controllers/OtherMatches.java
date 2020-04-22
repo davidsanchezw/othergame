@@ -1,6 +1,7 @@
 package com.comweb.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,14 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.comweb.conection.AdDBManager;
 import com.comweb.conection.DBManager;
+import com.comweb.conection.MatchDBManager;
 import com.comweb.conection.UserDBManager;
-import com.comweb.model.Ads;
+import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
-@WebServlet("/singleAd")
-public class SingleAd extends HttpServlet {
+@WebServlet("/otherMatches")
+public class OtherMatches extends HttpServlet {
 	/**
 	 * 
 	 */
@@ -32,24 +33,25 @@ public class SingleAd extends HttpServlet {
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
-
+			RequestDispatcher rd = null;
 			try (DBManager db = new DBManager()) {
-				AdDBManager adDb = new AdDBManager(db);
+				MatchDBManager matchDb = new MatchDBManager(db);
 				UserDBManager userDb = new UserDBManager(db);
+				int idUser = Integer.parseInt(request.getParameter("idUser"));
+				Users otherUser = userDb.getOtherUser(idUser);
+				request.setAttribute("otherUser", otherUser);
 
-				int idAd = Integer.parseInt(request.getParameter("idAd"));
-				Ads singleAd = adDb.getAd(idAd);
-				request.setAttribute("singleAd", singleAd);
-
-				Users simpleUser = userDb.getSimpleUserByAd(idAd);
-				request.setAttribute("simpleUser", simpleUser);
+				System.out.println("prueba00");
+				List<Matches> matches = (List<Matches>) matchDb.getEndedMatch(idUser, 3);
+				System.out.println("prueba01");
+				request.setAttribute("matches", matches);
+				request.setAttribute("title", "Propuestas completadas");
 
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
 			}
-
-			RequestDispatcher rd = request.getRequestDispatcher("singleAd.jsp");
+			rd = request.getRequestDispatcher("matchesOtherUser.jsp");
 			rd.forward(request, response);
 		}
 	}

@@ -104,4 +104,32 @@ public class UserDBManager {
 
 	}
 
+//	public Users getOtherUser(int idOtherUser) throws SQLException {
+//		entity.getTransaction().begin();
+//		Query query = entity
+//				.createNativeQuery("SELECT u.id u.publicName u.explanation FROM Users u WHERE u.id = :idOtherUser");
+//		query.setParameter("idOtherUser", idOtherUser);
+//
+//		Users otherUser = (Users) query.getSingleResult();
+//
+//		entity.getTransaction().commit();
+//		return otherUser;
+//	}
+
+	public Users getOtherUser(int idOtherUser) throws SQLException {
+		entity.getTransaction().begin();
+		Users tempUser = entity.find(Users.class, idOtherUser);
+		Users otherUser = new Users(tempUser.getId(), tempUser.getPublicName(), tempUser.getExplanation());
+		entity.getTransaction().commit();
+		return otherUser;
+	}
+
+	public Users getSimpleUserByAd(int idAd) throws SQLException {
+		entity.getTransaction().begin();
+		Ads ad = entity.find(Ads.class, idAd);
+		Users simpleUser = new Users(ad.getUser().getId(), ad.getUser().getPublicName(), ad.getUser().getExplanation());
+		entity.getTransaction().commit();
+		return simpleUser;
+	}
+
 }

@@ -1,6 +1,7 @@
 package com.comweb.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,8 +17,8 @@ import com.comweb.conection.UserDBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.Users;
 
-@WebServlet("/singleAd")
-public class SingleAd extends HttpServlet {
+@WebServlet("/otherProfile")
+public class OtherProfile extends HttpServlet {
 	/**
 	 * 
 	 */
@@ -34,22 +35,29 @@ public class SingleAd extends HttpServlet {
 		} else {
 
 			try (DBManager db = new DBManager()) {
-				AdDBManager adDb = new AdDBManager(db);
 				UserDBManager userDb = new UserDBManager(db);
+				AdDBManager adDb = new AdDBManager(db);
 
-				int idAd = Integer.parseInt(request.getParameter("idAd"));
-				Ads singleAd = adDb.getAd(idAd);
-				request.setAttribute("singleAd", singleAd);
+				System.out.println("000000");
 
-				Users simpleUser = userDb.getSimpleUserByAd(idAd);
-				request.setAttribute("simpleUser", simpleUser);
+				int idOtherUser = Integer.parseInt(request.getParameter("idOtherUser"));
+
+				System.out.println("pruebaUsers");
+				Users otherUser = userDb.getOtherUser(idOtherUser);
+				request.setAttribute("otherUser", otherUser);
+				System.out.println(otherUser.toString());
+
+				System.out.println("pruebaAds");
+				List<Ads> otherAds = adDb.getOtherUserAds(idOtherUser, 1);
+				System.out.println("pruebageted");
+				request.setAttribute("otherAds", otherAds);
 
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
 			}
 
-			RequestDispatcher rd = request.getRequestDispatcher("singleAd.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("otherProfile.jsp");
 			rd.forward(request, response);
 		}
 	}

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import com.comweb.model.Ads;
 import com.comweb.model.StatusItemTxt;
@@ -75,6 +76,25 @@ public class AdDBManager {
 		user.getId();
 		entity.getTransaction().commit();
 		return user;
+
+	}
+
+	/**
+	 * Search user by Id.
+	 *
+	 * @param id The id of the user.
+	 * @return The User object, or null if not found.
+	 * @throws SQLException If somthing fails with the DB.
+	 */
+	public List<Ads> getOtherUserAds(int idUser, int statusPostNumber) throws SQLException {
+		entity.getTransaction().begin();
+		Query query = entity.createQuery(
+				"SELECT a FROM Ads a WHERE a.user.id = :idUser AND a.statusPostTxt.id = :statusPostNumber", Ads.class);
+		query.setParameter("idUser", idUser);
+		query.setParameter("statusPostNumber", statusPostNumber);
+		List<Ads> ads = (List<Ads>) query.getResultList();
+		entity.getTransaction().commit();
+		return ads;
 
 	}
 
