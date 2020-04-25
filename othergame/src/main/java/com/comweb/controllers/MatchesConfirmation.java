@@ -1,7 +1,6 @@
 package com.comweb.controllers;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,38 +15,35 @@ import com.comweb.conection.MatchDBManager;
 import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
-@WebServlet("/matchesReceived")
-public class MatchesReceived extends HttpServlet {
+@WebServlet("/matchesConfirmation")
+public class MatchesConfirmation extends HttpServlet {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-		// Obtiene el usuario desde la sesiÃ³n. A login si no se encuentra.
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		HttpSession session = request.getSession();
+
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
-
 			try (DBManager db = new DBManager()) {
 				MatchDBManager matchDb = new MatchDBManager(db);
-				int usr2 = me.getId();
-				System.out.println("prueba0");
-				List<Matches> matches = (List<Matches>) matchDb.getSecondMatch(usr2, 1);
-				request.setAttribute("matches", matches);
-				request.setAttribute("title", "Propuestas recibidas");
+				// Modificar match a confirmado e invalidar anuncios
+				int idMatch = Integer.parseInt(request.getParameter("idMatch"));
+				Matches match = matchDb.getMatch(idMatch);
+				request.setAttribute("match", match);
+				RequestDispatcher rd = request.getRequestDispatcher("matchesConfirmation.jsp");
+				rd.forward(request, response);
 
+//NamingException
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
 			}
-
-			RequestDispatcher rd = request.getRequestDispatcher("matchesReceived.jsp");
-			rd.forward(request, response);
 		}
 	}
 

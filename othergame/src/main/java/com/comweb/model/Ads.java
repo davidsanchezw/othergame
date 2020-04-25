@@ -137,4 +137,8 @@ public class Ads implements java.io.Serializable {
 	public List<Matches> getMatchesSecond() {
 		return matchesSecond;
 	}
+
+	public void setStatusPostTxt(StatusPostTxt statusPostTxt) {
+		this.statusPostTxt = statusPostTxt;
+	}
 }

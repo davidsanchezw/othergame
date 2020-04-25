@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.comweb.model.Ads;
+import com.comweb.model.Matches;
 import com.comweb.model.StatusItemTxt;
 import com.comweb.model.StatusPostTxt;
 import com.comweb.model.Users;
@@ -92,6 +93,18 @@ public class AdDBManager {
 				"SELECT a FROM Ads a WHERE a.user.id = :idUser AND a.statusPostTxt.id = :statusPostNumber", Ads.class);
 		query.setParameter("idUser", idUser);
 		query.setParameter("statusPostNumber", statusPostNumber);
+		List<Ads> ads = (List<Ads>) query.getResultList();
+		entity.getTransaction().commit();
+		return ads;
+
+	}
+
+	public List<Ads> getOtherUserAdsByMatch(int idMatch) throws SQLException {
+		entity.getTransaction().begin();
+		int idUser = entity.find(Matches.class, idMatch).getUsr1().getId();
+		Query query = entity.createQuery("SELECT a FROM Ads a WHERE a.user.id = :idUser AND a.statusPostTxt.id = 1",
+				Ads.class);
+		query.setParameter("idUser", idUser);
 		List<Ads> ads = (List<Ads>) query.getResultList();
 		entity.getTransaction().commit();
 		return ads;

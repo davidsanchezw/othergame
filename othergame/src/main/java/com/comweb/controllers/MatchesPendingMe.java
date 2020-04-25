@@ -37,7 +37,7 @@ public class MatchesPendingMe extends HttpServlet {
 				MatchDBManager matchDb = new MatchDBManager(db);
 				int usr1 = me.getId();
 				System.out.println("prueba0");
-				List<Matches> matches = (List<Matches>) matchDb.getSecondMatch(usr1, 2);
+				List<Matches> matches = (List<Matches>) matchDb.getFirstMatch(usr1, 2);
 				request.setAttribute("matches", matches);
 				request.setAttribute("title", "Propuestas pendientes de mi");
 
@@ -46,7 +46,7 @@ public class MatchesPendingMe extends HttpServlet {
 				response.sendError(500);
 			}
 
-			RequestDispatcher rd = request.getRequestDispatcher("matchesView.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("matchesPendingMe.jsp");
 			rd.forward(request, response);
 		}
 	}
