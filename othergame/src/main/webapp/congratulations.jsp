@@ -7,10 +7,12 @@
 <title>Insert title here</title>
 </head>
 <body>
+<input type="button" onclick=" window.location.href='logout' " value="Cerrar sesión ">
  <input type="button" onclick=" window.location.href='principal' " value="Principal">
-            <input type="button" onclick=" window.location.href='logout' " value="Cerrar sesión ">
-            <h1>Felicidades, propuesta confirmada</h1>
-            <p>Podrás ver los datos de contacto en el apartado de propuestas completadas</p>
+            <input type="button" onclick=" window.location.href='myprofile' " value=" Mi perfil ">
+            <h1>Felicidades, acción efectuada</h1>
+            
+            <p>Podrás ver los datos de contacto, una vez finalizada la propuesta, en el apartado de propuestas completadas</p>
              <input type="button" onclick=" window.location.href='myprofile' " value="Mi perfil">
             
 </body>

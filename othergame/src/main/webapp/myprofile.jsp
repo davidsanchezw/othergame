@@ -6,76 +6,76 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>OtherGame-Mi perfil</title>
 </head>
 <body>
+	<input type="button" onclick=" window.location.href='logout' "
+		value="Cerrar sesión ">
 	<input type="button" onclick=" window.location.href='principal' "
 		value="Principal ">
 
-	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión ">
-	<h1>Mi perfil de usuario</h1>
+
+	<h1>Mi perfil de OtherGame</h1>
 	<%
 		Users me = (Users) session.getAttribute("me");
 	%>
+	<h2>Mis datos personales</h2>
+	<table>
+		<tr>
+			<td>Nickname:</td>
+			<td><%=me.getPublicName()%></td>
+		</tr>
+		<tr>
+			<td>Email:</td>
+			<td><%=me.getEmail()%></td>
+		</tr>
+		<tr>
+			<td>Contraseña:</td>
+			<td><%=me.getPass()%></td>
+		</tr>
+
+		<tr>
+			<td>Descripción:</td>
+			<td><%=me.getExplanation()%></td>
+		</tr>
+	</table>
 	
-		<p><%=me.toString()%></p>
-		
-		<h2>Propuestas</h2>
+	<h2>Mis propuestas</h2>
 	
-	<form action="matchesStarted" method="get"> <input type="submit"
-			value="Propuestas iniciadas" />
+	<h3>En proceso</h3>
+	<form action="matchesStarted" method="get">
+		<input type="submit" value="Propuestas iniciadas" />
 	</form>
-	<form action="matchesReceived" method="get"> <input type="submit"
-			value="Propuestas recibidas" />
+	<form action="matchesReceived" method="get">
+		<input type="submit" value="Propuestas recibidas" />
 	</form>
-	<form action="matchesPendingOther" method="get"> <input type="submit"
+	<form action="matchesPendingOther" method="get">
+		<input type="submit"
 			value="Propuestas respondidas, pendientes de otro" />
 	</form>
-	<form action="matchesPendingMe" method="get"> <input type="submit"
-			value="Propuestas pendientes de mí" />
+	<form action="matchesPendingMe" method="get">
+		<input type="submit" value="Propuestas pendientes de mí" />
 	</form>
-	<form action="matchesCompleted" method="get"> 
-	 <input type="submit"
-			value="Propuestas completadas" />
+	<h3>Finalizadas</h3>
+	<form action="matchesCompleted" method="get">
+		<input type="submit" value="Propuestas completadas" />
 	</form>
-	<form action="matchesCancelled" method="get"> 
-	<input type="submit"
-			value="Propuestas canceladas" />
+	<form action="matchesCancelled" method="get">
+		<input type="submit" value="Propuestas canceladas" />
 	</form>
-	<form action="matchesNonAvaible" method="get">
-	<input type="submit"
-			value="Propuestas no disponibles" />
+	<form action="matchesNonAvaibles" method="get">
+		<input type="submit" value="Propuestas no disponibles" />
 	</form>
 
-<h2>Mis anuncios disponibles</h2>
+	<h2>Mis anuncios</h2>
 	<input type="button" onclick=" window.location.href='publish' "
-		value="Publicar un anuncio ">
-	<%
-		List<Ads> ads = (List<Ads>) request.getAttribute("ads");
-	if (ads.size() < 1) {
-	%>
-	<p>No hay anuncios disponibles</p>
+		value="Publicar un anuncio">
+	<input type="button" onclick=" window.location.href='adsAvaibles' "
+		value="Ver mis anuncios disponibles">
+	<input type="button" onclick=" window.location.href='adsRetired' "
+		value="Ver mis anuncios retirados">
+	<input type="button" onclick=" window.location.href='adsCompleted' "
+		value="Ver mis anuncios Completados">
 
-	<%
-		} else {
-	%>
-
-	<%
-		for (Ads ad : ads) {
-	%>
-	<div>
-		<form action="singleAd" method="get">
-			<input type="hidden" name="idAd" value=<%=ad.getId()%> />
-			<p><%=ad.toString()%></p>
-			<input type="submit" value="Ver" />
-		</form>
-	</div>
-	<%
-		}
-	%>
-	<%
-		}
-	%>
 </body>
 </html>

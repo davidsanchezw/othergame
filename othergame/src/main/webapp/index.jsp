@@ -3,25 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<title>OtherGame-Login</title>
 </head>
 <body>
 
-<h2>Login Form</h2>
+	<h1>OtherGame</h1>
+	<h2>Introduce tu correo y contraseña</h2>
 
-<form action="check" method="post">
+	<form action="check" method="post">
 
-  <div class="container">
-    <label for="uemail"><b>Username</b></label>
-    <input type="text" placeholder="Enter Username" name="uemail" required>
+		<div class="container">
+			<label for="uemail"><b>Email:</b></label> <input type="text"
+				placeholder="Introduce tu email" name="uemail" required> <label
+				for="psw"><b>Contraseña:</b></label> <input type="password"
+				placeholder="Introduce tu contraseña" name="psw" required>
 
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" required>
-        
-    <button type="submit">Login</button>
-  </div>
-</form>
-<form action="register" method="post">
-    <button type="submit">Registrarse</button>
-</form>
+			<button type="submit">Entrar</button>
+		</div>
+	</form>
+	<h2>¿Aún no formas parte de esta gran comunidad?</h2>
+	<form action="register" method="get">
+		<button type="submit">Registrarse</button>
+	</form>
 </body>

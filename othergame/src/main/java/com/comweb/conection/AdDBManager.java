@@ -50,17 +50,36 @@ public class AdDBManager {
 		return entity.find(Ads.class, id);
 	}
 
-	public List<Ads> getLastAds() throws SQLException {
+//OK
+	public List<Ads> getLastAds(int size, int page) throws SQLException {
+		entity.getTransaction().begin();
+		Query query = entity.createQuery("SELECT a FROM Ads a WHERE a.statusPostTxt.id = 1 ORDER BY a.id DESC",
+				Ads.class);
+		query.setMaxResults(size);
+		query.setFirstResult(page * size);
+		List<Ads> ads = (List<Ads>) query.getResultList();
+		entity.getTransaction().commit();
+		return ads;
 
-		return (List<Ads>) entity.createQuery("FROM Ads").getResultList();
 	}
 
+//OK
 	public StatusItemTxt getstatusItemTxt(int id) {
 		return entity.find(StatusItemTxt.class, id);
 	}
 
+//OK
 	public StatusPostTxt getstatusPostTxt(int id) {
 		return entity.find(StatusPostTxt.class, id);
+	}
+
+//OK
+	public int getQuantity() {
+		entity.getTransaction().begin();
+		Query query = entity.createQuery("SELECT a FROM Ads a WHERE a.statusPostTxt.id = 1", Ads.class);
+		int quantity = (int) query.getResultList().size();
+		entity.getTransaction().commit();
+		return quantity;
 	}
 
 	/**
@@ -87,7 +106,8 @@ public class AdDBManager {
 	 * @return The User object, or null if not found.
 	 * @throws SQLException If somthing fails with the DB.
 	 */
-	public List<Ads> getOtherUserAds(int idUser, int statusPostNumber) throws SQLException {
+//OK
+	public List<Ads> getUserAds(int idUser, int statusPostNumber) throws SQLException {
 		entity.getTransaction().begin();
 		Query query = entity.createQuery(
 				"SELECT a FROM Ads a WHERE a.user.id = :idUser AND a.statusPostTxt.id = :statusPostNumber", Ads.class);

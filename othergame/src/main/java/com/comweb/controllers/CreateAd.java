@@ -49,13 +49,10 @@ public class CreateAd extends HttpServlet {
 
 				// Buscar en base de datos al usuario con dicho email y contraseña
 
-				System.out.println("id = 0");
-
 				int id = adDb.createAd(ad);
-				System.out.println("id = " + id);
-				Ads singleAd = adDb.getAd(id);
-				request.setAttribute("singleAd", singleAd);
-				RequestDispatcher rd = request.getRequestDispatcher("singleAd.jsp");
+				Ads mySimpleAd = adDb.getAd(id);
+				request.setAttribute("mySimpleAd", mySimpleAd);
+				RequestDispatcher rd = request.getRequestDispatcher("mySimpleAd.jsp");
 				rd.forward(request, response);
 
 //NamingException

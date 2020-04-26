@@ -3,6 +3,7 @@ package com.comweb.controllers;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,14 +37,24 @@ public class CreateUser extends HttpServlet {
 		// Buscar en base de datos al usuario con dicho email y contraseña
 		try (DBManager db = new DBManager()) {
 			UserDBManager userDb = new UserDBManager(db);
-			System.out.println("id = 0");
+			boolean emailAvalaible = userDb.emailAvalaible(uemail);
+			boolean nicknameAvalaible = userDb.nicknameAvalaible(usr);
+			if (!emailAvalaible) {
+				request.setAttribute("errorText", "Email existente");
+				RequestDispatcher rd = request.getRequestDispatcher("error-registro.jsp");
+				rd.forward(request, response);
 
-			int id = userDb.createUser(user);
-			System.out.println("id = " + id);
-			Users me = userDb.getUser(id);
-			session.setAttribute("me", me);
-			response.sendRedirect("principal");
+			} else if (!nicknameAvalaible) {
+				request.setAttribute("errorText", "Nombre de usuario existente");
+				RequestDispatcher rd = request.getRequestDispatcher("error-registro.jsp");
+				rd.forward(request, response);
+			} else {
 
+				int id = userDb.createUser(user);
+				Users me = userDb.getUser(id);
+				session.setAttribute("me", me);
+				response.sendRedirect("principal");
+			}
 //NamingException
 		} catch (SQLException e) {
 			e.printStackTrace();

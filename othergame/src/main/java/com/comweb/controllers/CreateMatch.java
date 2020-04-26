@@ -56,7 +56,7 @@ public class CreateMatch extends HttpServlet {
 				System.out.println("id = " + id);
 				Matches singleMatch = matchDb.getMatch(id);
 				request.setAttribute("singleMatch", singleMatch);
-				RequestDispatcher rd = request.getRequestDispatcher("singleMatch.jsp");
+				RequestDispatcher rd = request.getRequestDispatcher("mySingleMatchStarted.jsp");
 				rd.forward(request, response);
 
 //NamingException

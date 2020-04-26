@@ -24,6 +24,7 @@ public class UserDBManager {
 	 * @param email The email from user to check.
 	 * @return The number of id, or 0 if the email and pass does not match.
 	 */
+//OK
 	public Users checkLogin(String email, String pass) throws SQLException {
 		Query query = entity.createQuery("SELECT u FROM Users u WHERE u.email = :email AND pass = :pass", Users.class);
 		query.setParameter("email", email);
@@ -42,6 +43,7 @@ public class UserDBManager {
 	 * @param ad The user created.
 	 * @return The number of id, or 0 if ....
 	 */
+//OK
 	public int createUser(Users user) throws SQLException {
 		entity.getTransaction().begin();
 		entity.persist(user);
@@ -58,6 +60,22 @@ public class UserDBManager {
 	public boolean emailAvalaible(String email) throws SQLException {
 		Query query = entity.createQuery("SELECT u FROM Users u WHERE u.email = :email", Users.class);
 		query.setParameter("email", email);
+		List<Users> results = query.getResultList();
+		if (results.isEmpty())
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	 * Check in BD if an email exists.
+	 *
+	 * @param email The email to check.
+	 * @return True if is available, or false if not
+	 */
+	public boolean nicknameAvalaible(String nickName) throws SQLException {
+		Query query = entity.createQuery("SELECT u FROM Users u WHERE u.publicName = :nickName", Users.class);
+		query.setParameter("nickName", nickName);
 		List<Users> results = query.getResultList();
 		if (results.isEmpty())
 			return true;
@@ -84,15 +102,15 @@ public class UserDBManager {
 	 * @return The User object, or null if not found.
 	 * @throws SQLException If somthing fails with the DB.
 	 */
-	public List<Ads> getAdsUser(int id) throws SQLException {
-		entity.getTransaction().begin();
-		Users user = entity.find(Users.class, id);
-		List<Ads> ads = user.getAds();
-		ads.size();
-		entity.getTransaction().commit();
-		return ads;
-
-	}
+//	public List<Ads> getAdsUser(int id) throws SQLException {
+//		entity.getTransaction().begin();
+//		Users user = entity.find(Users.class, id);
+//		List<Ads> ads = user.getAds();
+//		ads.size();
+//		entity.getTransaction().commit();
+//		return ads;
+//
+//	}
 
 	public List<Matches> getMatchesFirstUser(int id) throws SQLException {
 		entity.getTransaction().begin();
@@ -124,6 +142,7 @@ public class UserDBManager {
 		return otherUser;
 	}
 
+//OK
 	public Users getSimpleUserByAd(int idAd) throws SQLException {
 		entity.getTransaction().begin();
 		Ads ad = entity.find(Ads.class, idAd);

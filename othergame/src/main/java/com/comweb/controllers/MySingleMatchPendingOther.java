@@ -1,8 +1,6 @@
 package com.comweb.controllers;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,19 +10,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.comweb.conection.AdDBManager;
 import com.comweb.conection.DBManager;
-import com.comweb.model.Ads;
+import com.comweb.conection.MatchDBManager;
+import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
-@WebServlet("/principal")
-public class Principal extends HttpServlet {
+@WebServlet("/mySingleMatchPendingOther")
+public class MySingleMatchPendingOther extends HttpServlet {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		// Obtiene el usuario desde la sesiÃ³n. A login si no se encuentra.
 
@@ -33,26 +31,19 @@ public class Principal extends HttpServlet {
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
-			// Buscar en base de datos al usuario con dicho email y contraseña
+
 			try (DBManager db = new DBManager()) {
-				AdDBManager adDb = new AdDBManager(db);
-				int size = 10;
-				int page = 0;
-				List<Ads> principalAds = (List<Ads>) adDb.getLastAds(size, page);
-				// Reenvia la peticion a una plantilla JSP, pasando el los anuncios como
-				// atributo
-				request.setAttribute("principalAds", principalAds);
-
-				request.setAttribute("quantity", adDb.getQuantity());
-
-			} catch (SQLException e) {
+				MatchDBManager matchDb = new MatchDBManager(db);
+				int idMatch = Integer.parseInt(request.getParameter("idMatch"));
+				Matches singleMatch = matchDb.getMatch(idMatch);
+				request.setAttribute("singleMatch", singleMatch);
+			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
 			}
 
-			RequestDispatcher rd = request.getRequestDispatcher("principal.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("mySingleMatchPendingOther.jsp");
 			rd.forward(request, response);
-//NamingException
 		}
 	}
 

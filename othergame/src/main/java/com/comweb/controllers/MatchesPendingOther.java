@@ -39,14 +39,13 @@ public class MatchesPendingOther extends HttpServlet {
 				System.out.println("prueba0");
 				List<Matches> matches = (List<Matches>) matchDb.getSecondMatch(usr2, 2);
 				request.setAttribute("matches", matches);
-				request.setAttribute("title", "Propuestas respondidas, pendientes de otro");
 
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
 			}
 
-			RequestDispatcher rd = request.getRequestDispatcher("matchesView.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("matchesPendingOther.jsp");
 			rd.forward(request, response);
 		}
 	}

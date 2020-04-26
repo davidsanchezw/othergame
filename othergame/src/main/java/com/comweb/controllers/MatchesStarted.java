@@ -39,14 +39,13 @@ public class MatchesStarted extends HttpServlet {
 				System.out.println("prueba0");
 				List<Matches> matches = (List<Matches>) matchDb.getFirstMatch(usr1, 1);
 				request.setAttribute("matches", matches);
-				request.setAttribute("title", "Propuestas iniciadas");
 
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
 			}
 
-			RequestDispatcher rd = request.getRequestDispatcher("matchesView.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("matchesStarted.jsp");
 			rd.forward(request, response);
 		}
 	}

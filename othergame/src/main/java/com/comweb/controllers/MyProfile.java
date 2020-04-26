@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.comweb.conection.AdDBManager;
 import com.comweb.conection.DBManager;
 import com.comweb.conection.UserDBManager;
 import com.comweb.model.Ads;
@@ -35,10 +36,11 @@ public class MyProfile extends HttpServlet {
 
 			try (DBManager db = new DBManager()) {
 				UserDBManager userDb = new UserDBManager(db);
+				AdDBManager adDb = new AdDBManager(db);
 				System.out.println("prueba0");
 				Users user = userDb.getUser(me.getId());
 				System.out.println("prueba1");
-				List<Ads> ads = userDb.getAdsUser(user.getId());
+				List<Ads> ads = adDb.getUserAds(user.getId(), 1);
 				System.out.println(ads);
 				request.setAttribute("ads", ads);
 			} catch (Exception e) {

@@ -3,6 +3,7 @@ package com.comweb.conection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -145,6 +146,25 @@ public class MatchDBManager {
 		StatusPostTxt statusPostTxt = entity.find(StatusPostTxt.class, 3);
 		matchToCompleted.getAd1().setStatusPostTxt(statusPostTxt);
 		matchToCompleted.getAd2().setStatusPostTxt(statusPostTxt);
+
+		// Modifica las propuestas a no disponibles
+		statusMatchTxt = entity.find(StatusMatchTxt.class, 5);
+		ListIterator<Matches> list = matchToCompleted.getAd1().getMatchesFirst().listIterator();
+		while (list.hasNext()) {
+			list.next().setStatusMatchTxt(statusMatchTxt);
+		}
+		list = matchToCompleted.getAd1().getMatchesSecond().listIterator();
+		while (list.hasNext()) {
+			list.next().setStatusMatchTxt(statusMatchTxt);
+		}
+		list = matchToCompleted.getAd2().getMatchesSecond().listIterator();
+		while (list.hasNext()) {
+			list.next().setStatusMatchTxt(statusMatchTxt);
+		}
+		list = matchToCompleted.getAd2().getMatchesSecond().listIterator();
+		while (list.hasNext()) {
+			list.next().setStatusMatchTxt(statusMatchTxt);
+		}
 
 		ok = true;
 		entity.getTransaction().commit();

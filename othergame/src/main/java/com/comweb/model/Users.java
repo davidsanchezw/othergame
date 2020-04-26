@@ -40,11 +40,11 @@ public class Users implements java.io.Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	@Column
+	@Column(unique = true)
 	private String email;
 	@Column
 	private String pass;
-	@Column
+	@Column(unique = true)
 	private String publicName;
 	@Column
 	private String explanation;

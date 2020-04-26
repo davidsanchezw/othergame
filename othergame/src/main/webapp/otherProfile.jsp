@@ -5,21 +5,24 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>OtherGame-Perfil de otro usuario</title>
 </head>
 <body>
+
+<input type="button" onclick=" window.location.href='logout' "
+		value="Cerrar sesión ">
 	<input type="button" onclick=" window.location.href='principal' "
 		value="Principal ">
-
-	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión ">
+<input type="button" onclick=" window.location.href='myprofile' "
+		value="Mi perfil ">
+	
 	<%
 		Users otherUser = (Users) request.getAttribute("otherUser");
 	%>	
 	<h1>Perfil de <%=otherUser.getPublicName() %></h1>
 	
 	
-		<p><%=otherUser.toString()%></p>
+		<p>Descripción: <%=otherUser.getExplanation()%></p>
 		
 		<h2>Propuestas</h2>
 	
@@ -48,7 +51,7 @@
 	<div>
 		<form action="singleAd" method="get">
 			<input type="hidden" name="idAd" value=<%=ad.getId()%> />
-			<p><%=ad.toString()%></p>
+			<p><%=ad.getNameAd()%></p>
 			<input type="submit" value="Ver" />
 		</form>
 	</div>

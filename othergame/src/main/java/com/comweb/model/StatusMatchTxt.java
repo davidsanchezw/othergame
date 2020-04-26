@@ -19,6 +19,10 @@ public class StatusMatchTxt {
 	@Column
 	private String txt;
 
+	public int getId() {
+		return id;
+	}
+
 	public String getTxt() {
 		return txt;
 	}

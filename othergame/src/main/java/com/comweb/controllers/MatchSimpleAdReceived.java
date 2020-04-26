@@ -1,7 +1,6 @@
 package com.comweb.controllers;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,20 +10,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.comweb.conection.AdDBManager;
 import com.comweb.conection.DBManager;
 import com.comweb.conection.MatchDBManager;
 import com.comweb.conection.UserDBManager;
+import com.comweb.model.Ads;
 import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
-@WebServlet("/otherMatches")
-public class OtherMatches extends HttpServlet {
+@WebServlet("/matchSimpleAdReceived")
+public class MatchSimpleAdReceived extends HttpServlet {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		// Obtiene el usuario desde la sesiÃ³n. A login si no se encuentra.
 
@@ -33,25 +34,31 @@ public class OtherMatches extends HttpServlet {
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
-			RequestDispatcher rd = null;
-			try (DBManager db = new DBManager()) {
-				MatchDBManager matchDb = new MatchDBManager(db);
-				UserDBManager userDb = new UserDBManager(db);
-				int idUser = Integer.parseInt(request.getParameter("idUser"));
-				Users otherUser = userDb.getOtherUser(idUser);
-				request.setAttribute("otherUser", otherUser);
 
-				System.out.println("prueba00");
-				List<Matches> matches = (List<Matches>) matchDb.getEndedMatch(idUser, 3);
-				System.out.println("prueba01");
-				request.setAttribute("matches", matches);
-				request.setAttribute("title", "Propuestas completadas");
+			try (DBManager db = new DBManager()) {
+				AdDBManager adDb = new AdDBManager(db);
+				UserDBManager userDb = new UserDBManager(db);
+				MatchDBManager matchDb = new MatchDBManager(db);
+				System.out.println("JJEJEJEEJE");
+
+				int idAd = Integer.parseInt(request.getParameter("idAd"));
+				System.out.println(idAd);
+
+				Ads singleAd = adDb.getAd(idAd);
+				System.out.println(singleAd.getId());
+				request.setAttribute("singleAd", singleAd);
+
+				int idMatch = Integer.parseInt(request.getParameter("idMatch"));
+				System.out.println("idMatch" + idMatch);
+				Matches match = matchDb.getMatch(idMatch);
+				request.setAttribute("match", match);
 
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
 			}
-			rd = request.getRequestDispatcher("otherMatches.jsp");
+
+			RequestDispatcher rd = request.getRequestDispatcher("matchSimpleAdReceived.jsp");
 			rd.forward(request, response);
 		}
 	}

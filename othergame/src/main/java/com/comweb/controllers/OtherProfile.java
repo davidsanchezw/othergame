@@ -48,7 +48,7 @@ public class OtherProfile extends HttpServlet {
 				System.out.println(otherUser.toString());
 
 				System.out.println("pruebaAds");
-				List<Ads> otherAds = adDb.getOtherUserAds(idOtherUser, 1);
+				List<Ads> otherAds = adDb.getUserAds(idOtherUser, 1);
 				System.out.println("pruebageted");
 				request.setAttribute("otherAds", otherAds);
 

@@ -1,7 +1,6 @@
 package com.comweb.controllers;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -14,11 +13,12 @@ import javax.servlet.http.HttpSession;
 
 import com.comweb.conection.AdDBManager;
 import com.comweb.conection.DBManager;
+import com.comweb.conection.UserDBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.Users;
 
-@WebServlet("/principal")
-public class Principal extends HttpServlet {
+@WebServlet("/adsRetired")
+public class AdsRetired extends HttpServlet {
 	/**
 	 * 
 	 */
@@ -33,26 +33,19 @@ public class Principal extends HttpServlet {
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
-			// Buscar en base de datos al usuario con dicho email y contraseña
+
 			try (DBManager db = new DBManager()) {
+				UserDBManager userDb = new UserDBManager(db);
 				AdDBManager adDb = new AdDBManager(db);
-				int size = 10;
-				int page = 0;
-				List<Ads> principalAds = (List<Ads>) adDb.getLastAds(size, page);
-				// Reenvia la peticion a una plantilla JSP, pasando el los anuncios como
-				// atributo
-				request.setAttribute("principalAds", principalAds);
-
-				request.setAttribute("quantity", adDb.getQuantity());
-
-			} catch (SQLException e) {
+				List<Ads> myAds = adDb.getUserAds(me.getId(), 2);
+				request.setAttribute("myAds", myAds);
+			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
 			}
 
-			RequestDispatcher rd = request.getRequestDispatcher("principal.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("adsRetired.jsp");
 			rd.forward(request, response);
-//NamingException
 		}
 	}
 
