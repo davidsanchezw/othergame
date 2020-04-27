@@ -119,6 +119,32 @@ public class AdDBManager {
 
 	}
 
+//OK 
+	public List<Ads> getResultSearch(String search, int size, int page) {
+		entity.getTransaction().begin();
+		Query query = entity.createQuery("FROM Ads a WHERE a.nameAd like :search AND a.statusPostTxt.id = 1",
+				Ads.class);
+		query.setParameter("search", "%" + search + "%");
+		query.setMaxResults(size);
+		query.setFirstResult(page * size);
+		List<Ads> ads = (List<Ads>) query.getResultList();
+		entity.getTransaction().commit();
+		return ads;
+
+	}
+
+//OK
+	public int getQuantitySearched(String search) {
+		entity.getTransaction().begin();
+		Query query = entity.createQuery("FROM Ads a WHERE a.nameAd like :search AND a.statusPostTxt.id = 1",
+				Ads.class);
+		query.setParameter("search", "%" + search + "%");
+
+		int quantitySearched = (int) query.getResultList().size();
+		entity.getTransaction().commit();
+		return quantitySearched;
+	}
+
 	public List<Ads> getOtherUserAdsByMatch(int idMatch) throws SQLException {
 		entity.getTransaction().begin();
 		int idUser = entity.find(Matches.class, idMatch).getUsr1().getId();
