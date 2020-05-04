@@ -17,8 +17,8 @@ import com.comweb.conection.DBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.Users;
 
-@WebServlet("/principal")
-public class Principal extends HttpServlet {
+@WebServlet("/moreResults")
+public class MoreResults extends HttpServlet {
 	/**
 	 * 
 	 */
@@ -37,7 +37,7 @@ public class Principal extends HttpServlet {
 			try (DBManager db = new DBManager()) {
 				AdDBManager adDb = new AdDBManager(db);
 				int size = 10;
-				int page = 0;
+				int page = Integer.parseInt(request.getParameter("page"));
 				List<Ads> principalAds = (List<Ads>) adDb.getLastAds(size, page);
 				// Reenvia la peticion a una plantilla JSP, pasando el los anuncios como
 				// atributo
