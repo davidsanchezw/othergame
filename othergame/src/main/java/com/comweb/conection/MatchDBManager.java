@@ -135,12 +135,6 @@ public class MatchDBManager {
 		boolean ok = false;
 		entity.getTransaction().begin();
 		Matches matchToCompleted = entity.find(Matches.class, idMatchToCompleted);
-		StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 3);
-		Date date = new Date();
-
-		// Modifica el match a completado
-		matchToCompleted.setStatusMatchTxt(statusMatchTxt);
-		matchToCompleted.setDateEnd(date);
 
 		// Modifica los anuncios a completados
 		StatusPostTxt statusPostTxt = entity.find(StatusPostTxt.class, 3);
@@ -148,7 +142,7 @@ public class MatchDBManager {
 		matchToCompleted.getAd2().setStatusPostTxt(statusPostTxt);
 
 		// Modifica las propuestas a no disponibles
-		statusMatchTxt = entity.find(StatusMatchTxt.class, 5);
+		StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 5);
 		ListIterator<Matches> list = matchToCompleted.getAd1().getMatchesFirst().listIterator();
 		while (list.hasNext()) {
 			list.next().setStatusMatchTxt(statusMatchTxt);
@@ -165,6 +159,12 @@ public class MatchDBManager {
 		while (list.hasNext()) {
 			list.next().setStatusMatchTxt(statusMatchTxt);
 		}
+
+		// Modifica el match a completado
+		statusMatchTxt = entity.find(StatusMatchTxt.class, 3);
+		Date date = new Date();
+		matchToCompleted.setStatusMatchTxt(statusMatchTxt);
+		matchToCompleted.setDateEnd(date);
 
 		ok = true;
 		entity.getTransaction().commit();
