@@ -50,8 +50,8 @@
 		if (singleAd.getStatusPostTxt().getId() == 1) {
 	%>
 	<div>
-		<form action="retire" method="get">
-			<input type="hidden" name="idAd" value=<%=singleAd.getId()%> /> <input
+		<form action="adToRetired" method="post">
+			<input type="hidden" name="idAdToRetired" value=<%=singleAd.getId()%> /> <input
 				type="submit" value="Retirar anuncio" />
 		</form>
 	</div>
@@ -64,8 +64,8 @@
 		} else if (singleAd.getStatusPostTxt().getId() == 2) {
 	%>
 	<div>
-		<form action="restore" method="get">
-			<input type="hidden" name="idAd" value=<%=singleAd.getId()%> /> <input
+		<form action="adToRestored" method="get">
+			<input type="hidden" name="idAdToRestored" value=<%=singleAd.getId()%> /> <input
 				type="submit" value="Restaurar anuncio" />
 		</form>
 	</div>

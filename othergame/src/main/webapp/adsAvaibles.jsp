@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>OtherGame-Mis disponibles</title>
 </head>
 <body>
 	<input type="button" onclick=" window.location.href='logout' "
@@ -15,10 +15,11 @@
 		value="Principal">
 	<input type="button" onclick=" window.location.href='myprofile' "
 		value="Mi perfil">	
-<h1>OtherGame</h1>
-<h2>Mis anuncios disponibles</h2>
 	<input type="button" onclick=" window.location.href='publish' "
 		value="Publicar un anuncio ">
+<h1>OtherGame</h1>
+<h2>Mis anuncios disponibles</h2>
+	
 	<%
 		List<Ads> myAds = (List<Ads>) request.getAttribute("myAds");
 	if (myAds.size() < 1) {
@@ -43,8 +44,8 @@
 			<input type="hidden" name="idAd" value=<%=ad.getId()%> />
 			<input type="submit" value="Ver" />
 		</form>
-		<form action="retire" method="post">
-			<input type="hidden" name="idAd" value=<%=ad.getId()%> />
+		<form action="adToRetired" method="post">
+			<input type="hidden" name="idAdToRetired" value=<%=ad.getId()%> />
 			<input type="submit" value="Retirar" />
 		</form>
 	</div>

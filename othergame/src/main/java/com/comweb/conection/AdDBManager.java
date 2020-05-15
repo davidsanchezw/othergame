@@ -2,6 +2,7 @@ package com.comweb.conection;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -9,6 +10,7 @@ import javax.persistence.Query;
 import com.comweb.model.Ads;
 import com.comweb.model.Matches;
 import com.comweb.model.StatusItemTxt;
+import com.comweb.model.StatusMatchTxt;
 import com.comweb.model.StatusPostTxt;
 import com.comweb.model.Users;
 
@@ -143,6 +145,47 @@ public class AdDBManager {
 		int quantitySearched = (int) query.getResultList().size();
 		entity.getTransaction().commit();
 		return quantitySearched;
+	}
+
+//OK
+	public boolean adToRetired(int idAdToRetired) {
+		boolean ok = false;
+		entity.getTransaction().begin();
+		// Modifica el ad a retirado
+		Ads adToRetired = entity.find(Ads.class, idAdToRetired);
+		StatusPostTxt statusPostTxt = entity.find(StatusPostTxt.class, 2);
+		adToRetired.setStatusPostTxt(statusPostTxt);
+
+		// Modifica los match a no disponibles
+		StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 5);
+
+		ListIterator<Matches> list = adToRetired.getMatchesFirst().listIterator();
+		while (list.hasNext()) {
+			list.next().setStatusMatchTxt(statusMatchTxt);
+		}
+		list = adToRetired.getMatchesSecond().listIterator();
+		while (list.hasNext()) {
+			list.next().setStatusMatchTxt(statusMatchTxt);
+		}
+
+		ok = true;
+		entity.getTransaction().commit();
+		return ok;
+
+	}
+
+//OK
+	public boolean adToRestored(int idAdToRestoredd) {
+		boolean ok = false;
+		entity.getTransaction().begin();
+		// Modifica el ad a retirado
+		Ads adToRetired = entity.find(Ads.class, idAdToRestoredd);
+		StatusPostTxt statusPostTxt = entity.find(StatusPostTxt.class, 1);
+		adToRetired.setStatusPostTxt(statusPostTxt);
+
+		ok = true;
+		entity.getTransaction().commit();
+		return ok;
 	}
 
 	public List<Ads> getOtherUserAdsByMatch(int idMatch) throws SQLException {

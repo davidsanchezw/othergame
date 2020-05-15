@@ -10,12 +10,14 @@
 </head>
 <body>
 	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión ">
+		value="Cerrar sesión">
 	<input type="button" onclick=" window.location.href='principal' "
-		value="Principal ">
+		value="Principal">
 
 
-	<h1>Mi perfil de OtherGame</h1>
+	<h1>OtherGame</h1>
+	<h2>Mi perfil</h2>
+	<p>Aquí puedes ver tus propuestas en proceso, propuestas finalizadas, y tus anuncios</p>
 	<%
 		Users me = (Users) session.getAttribute("me");
 	%>

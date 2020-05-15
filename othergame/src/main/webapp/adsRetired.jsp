@@ -6,17 +6,17 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>OtherGame-Mis retirados</title>
 </head>
 <body>
 	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión ">
+		value="Cerrar sesión">
 	<input type="button" onclick=" window.location.href='principal' "
 		value="Principal">
 	<input type="button" onclick=" window.location.href='myprofile' "
 		value="Mi perfil">
 	<input type="button" onclick=" window.location.href='publish' "
-		value="Publicar un anuncio ">
+		value="Publicar un anuncio">
 <h1>OtherGame</h1>
 <h2>Mis anuncios retirados</h2>
 	
@@ -44,8 +44,8 @@
 			<input type="hidden" name="idAd" value=<%=ad.getId()%> />
 			<input type="submit" value="Ver" />
 		</form>
-		<form action="restore" method="post">
-			<input type="hidden" name="idAd" value=<%=ad.getId()%> />
+		<form action="adToRestored" method="post">
+			<input type="hidden" name="idAdToRestored" value=<%=ad.getId()%> />
 			<input type="submit" value="Restaurar" />
 		</form>
 	</div>

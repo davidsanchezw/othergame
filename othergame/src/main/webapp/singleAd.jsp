@@ -41,7 +41,7 @@
 		</table>
 	</div>
 	<div>
-		<form action="createMatch" method="get">
+		<form action="createMatch" method="post">
 			<input type="hidden" name="idAd" value=<%=singleAd.getId()%> /> <input
 				type="submit" value="Proponer intercambio" />
 		</form>
