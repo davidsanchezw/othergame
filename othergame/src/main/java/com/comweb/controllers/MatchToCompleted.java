@@ -2,7 +2,6 @@ package com.comweb.controllers;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,8 +34,8 @@ public class MatchToCompleted extends HttpServlet {
 				int idMatchToCompleted = Integer.parseInt(request.getParameter("idMatchToCompleted"));
 				boolean estado = matchDb.matchToConfirm(idMatchToCompleted);
 				System.out.println("Estado = " + estado);
-				RequestDispatcher rd = request.getRequestDispatcher("congratulations.jsp");
-				rd.forward(request, response);
+				// Redirecciono a notificacion
+				response.sendRedirect("noticeCompleted");
 
 //NamingException
 			} catch (Exception e) {

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -49,13 +48,9 @@ public class CreateAd extends HttpServlet {
 
 				// Buscar en base de datos al usuario con dicho email y contraseña
 
-				int id = adDb.createAd(ad);
-				Ads singleAd = adDb.getAd(id);
-				request.setAttribute("singleAd", singleAd);
-				RequestDispatcher rd = request.getRequestDispatcher("mySingleAd.jsp");
-				rd.forward(request, response);
+				int idAd = adDb.createAd(ad);
+				response.sendRedirect("adView?idAd=" + idAd);
 
-//NamingException
 			} catch (SQLException e) {
 				e.printStackTrace();
 				response.sendError(500);

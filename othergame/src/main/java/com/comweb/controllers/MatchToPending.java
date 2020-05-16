@@ -3,7 +3,6 @@ package com.comweb.controllers;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,16 +31,15 @@ public class MatchToPending extends HttpServlet {
 		} else {
 			try (DBManager db = new DBManager()) {
 				MatchDBManager matchDb = new MatchDBManager(db);
-				// Modificar match a confirmado e invalidar anuncios
+				// Modificar match a Pendiente
 				int idMatchToPending = Integer.parseInt(request.getParameter("idMatchToPending"));
 				int idAdToPending = Integer.parseInt(request.getParameter("idAdToPending"));
 
 				boolean estado = matchDb.matchToPending(idMatchToPending, idAdToPending);
 				System.out.println("Estado = " + estado);
-				RequestDispatcher rd = request.getRequestDispatcher("congratulations.jsp");
-				rd.forward(request, response);
+				// Redirecciono a notificacion
+				response.sendRedirect("noticePending");
 
-//NamingException
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);

@@ -46,7 +46,8 @@ public class AdView extends HttpServlet {
 				} else if (caso == 2) {
 					response.sendRedirect("adViewOther?idAd=" + idAd);
 				}
-
+				if (caso == 0)
+					response.sendRedirect("error-anuncio.html");
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendError(500);
