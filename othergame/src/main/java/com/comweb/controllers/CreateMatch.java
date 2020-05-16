@@ -27,7 +27,7 @@ public class CreateMatch extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		HttpSession session = request.getSession();
 
@@ -56,6 +56,7 @@ public class CreateMatch extends HttpServlet {
 				System.out.println("id = " + id);
 				Matches singleMatch = matchDb.getMatch(id);
 				request.setAttribute("singleMatch", singleMatch);
+
 				RequestDispatcher rd = request.getRequestDispatcher("mySingleMatchStarted.jsp");
 				rd.forward(request, response);
 

@@ -67,7 +67,7 @@
 			for (Ads ad : ads) {
 		%>
 		<div>
-			<form action="singleAd" method="get">
+			<form action="adView" method="get">
 				<input type="hidden" name="idAd" value=<%=ad.getId()%> />
 
 				<tr>

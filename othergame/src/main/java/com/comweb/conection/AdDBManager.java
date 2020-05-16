@@ -52,6 +52,43 @@ public class AdDBManager {
 		return entity.find(Ads.class, id);
 	}
 
+//ok
+	public Ads getMyAd(int idAd, int idUser) throws SQLException {
+		entity.getTransaction().begin();
+
+		Query query = entity.createQuery(
+				"SELECT a FROM Ads a WHERE a.user.id = :idUser AND a.id = :idAd AND a.statusPostTxt.id = 1", Ads.class);
+		query.setParameter("idUser", idUser);
+		query.setParameter("idAd", idAd);
+
+		List<Ads> ads = (List<Ads>) query.getResultList();
+
+		entity.getTransaction().commit();
+		if (ads.size() > 0)
+			return ads.get(0);
+		else
+			return null;
+	}
+
+//ok
+	public Ads getOtherAd(int idAd, int idUser) throws SQLException {
+		entity.getTransaction().begin();
+
+		Query query = entity.createQuery(
+				"SELECT a FROM Ads a WHERE a.user.id != :idUser AND a.id = :idAd AND a.statusPostTxt.id = 1",
+				Ads.class);
+		query.setParameter("idUser", idUser);
+		query.setParameter("idAd", idAd);
+
+		List<Ads> ads = (List<Ads>) query.getResultList();
+
+		entity.getTransaction().commit();
+		if (ads.size() > 0)
+			return ads.get(0);
+		else
+			return null;
+	}
+
 //OK
 	public List<Ads> getLastAds(int size, int page) throws SQLException {
 		entity.getTransaction().begin();
@@ -186,6 +223,26 @@ public class AdDBManager {
 		ok = true;
 		entity.getTransaction().commit();
 		return ok;
+	}
+
+//OK
+	public int adCheck(int idAd, int idUser) {
+		int caso = 0;
+		entity.getTransaction().begin();
+		Users me = entity.find(Users.class, idUser);
+		// Caso anuncio mio
+		Query query = entity.createQuery("SELECT a FROM Ads a WHERE a.user.id = :idUser AND a.id = :idAd", Ads.class);
+		query.setParameter("idUser", idUser);
+		query.setParameter("idAd", idAd);
+
+		List<Ads> ads = (List<Ads>) query.getResultList();
+		if (ads.size() > 0)
+			caso = 1;
+		else {
+			caso = 2;
+		}
+		entity.getTransaction().commit();
+		return caso;
 	}
 
 	public List<Ads> getOtherUserAdsByMatch(int idMatch) throws SQLException {

@@ -219,4 +219,38 @@ public class MatchDBManager {
 		return ok;
 	}
 
+	public List<Matches> getMatchesRelationated(int idAd, int statusMatchNumber) throws SQLException {
+		entity.getTransaction().begin();
+		Ads ad = entity.find(Ads.class, idAd);
+
+		Query query = entity.createQuery(
+				"SELECT m FROM Matches m WHERE (m.ad1.id = :idAd OR m.ad2.id = :idAd) AND m.statusMatchTxt.id = :statusMatchNumber",
+				Matches.class);
+		query.setParameter("idAd", idAd);
+		query.setParameter("statusMatchNumber", statusMatchNumber);
+
+		List<Matches> matches = (List<Matches>) query.getResultList();
+		entity.getTransaction().commit();
+		return matches;
+	}
+
+	public Matches getMatchRelationated(int idAd, int statusMatchNumber, int idUser) throws SQLException {
+		entity.getTransaction().begin();
+		Ads ad = entity.find(Ads.class, idAd);
+
+		Query query = entity.createQuery(
+				"SELECT m FROM Matches m WHERE (m.ad1.id = :idAd OR m.ad2.id = :idAd) AND (m.usr1.id = :idUser OR m.usr2.id = :idUser) AND m.statusMatchTxt.id = :statusMatchNumber",
+				Matches.class);
+		query.setParameter("idAd", idAd);
+		query.setParameter("idUser", idUser);
+		query.setParameter("statusMatchNumber", statusMatchNumber);
+
+		List<Matches> matches = (List<Matches>) query.getResultList();
+		entity.getTransaction().commit();
+		if (matches.size() > 0)
+			return matches.get(0);
+		else
+			return null;
+	}
+
 }

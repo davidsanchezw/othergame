@@ -46,22 +46,9 @@
 			<tr>
 		</table>
 	</div>
-	<%
-		if (singleAd.getStatusPostTxt().getId() == 1) {
-	%>
-	<div>
-		<form action="adToRetired" method="post">
-			<input type="hidden" name="idAdToRetired" value=<%=singleAd.getId()%> /> <input
-				type="submit" value="Retirar anuncio" />
-		</form>
-	</div>
 
-	<div>
-		<input type="button" onclick=" window.location.href='adsAvaibles' "
-			value="Mis anuncions disponibles">
-	</div>
 	<%
-		} else if (singleAd.getStatusPostTxt().getId() == 2) {
+		 if (singleAd.getStatusPostTxt().getId() == 2) {
 	%>
 	<div>
 		<form action="adToRestored" method="get">

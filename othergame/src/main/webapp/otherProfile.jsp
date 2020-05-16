@@ -10,11 +10,11 @@
 <body>
 
 <input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión ">
+		value="Cerrar sesión">
 	<input type="button" onclick=" window.location.href='principal' "
-		value="Principal ">
+		value="Principal">
 <input type="button" onclick=" window.location.href='myprofile' "
-		value="Mi perfil ">
+		value="Mi perfil">
 	
 	<%
 		Users otherUser = (Users) request.getAttribute("otherUser");

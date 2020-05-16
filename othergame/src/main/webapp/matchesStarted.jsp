@@ -8,10 +8,10 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>OtherGame-Propuestas Iniciadas</title>
 </head>
 <body>
-    <input type="button" onclick=" window.location.href='logout' " value="Cerrar sesión ">
+    <input type="button" onclick=" window.location.href='logout' " value="Cerrar sesión">
     <input type="button" onclick=" window.location.href='principal' " value="Principal">
 <input type="button" onclick=" window.location.href='myprofile' " value="Mi perfil">
 

@@ -37,7 +37,7 @@
 		</tr>
 		<tr>
 			<td>
-				<form action="singleAd" method="get">
+				<form action="adView" method="get">
 					<input type="hidden" name="idAd"
 						value=<%=singleMatch.getAd1().getId()%> /> <input type="submit"
 						value="Ver anuncio" />
