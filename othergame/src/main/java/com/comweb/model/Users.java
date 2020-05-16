@@ -24,9 +24,10 @@ public class Users implements java.io.Serializable {
 		this.explanation = explanation;
 	}
 
-	public Users(String email, String pass, String publicName, String explanation) {
+	public Users(String email, String salt, String pass, String publicName, String explanation) {
 		super();
 		this.email = email;
+		this.salt = salt;
 		this.pass = pass;
 		this.publicName = publicName;
 		this.explanation = explanation;
@@ -42,6 +43,8 @@ public class Users implements java.io.Serializable {
 	private Integer id;
 	@Column(unique = true)
 	private String email;
+	@Column
+	private String salt;
 	@Column
 	private String pass;
 	@Column(unique = true)
@@ -64,6 +67,10 @@ public class Users implements java.io.Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getSalt() {
+		return salt;
 	}
 
 	public String getPass() {

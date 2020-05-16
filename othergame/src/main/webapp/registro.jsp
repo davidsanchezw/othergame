@@ -21,8 +21,12 @@
 				<td><input type="text" name="usr" size="20" required></td>
 			</tr>
 			<tr>
-				<td>Pass:</td>
+				<td>Contraseña:</td>
 				<td><input type="password" name="psw" size="20" required></td>
+			</tr>
+			<tr>
+				<td>Repite la contraseña()Pendiente(Tambien pendiente pedir mejor contraseña):</td>
+<!-- 				<td><input type="password" name="psw2" size="20" required></td> -->
 			</tr>
 			<tr>
 				<td>Descripcion:</td>

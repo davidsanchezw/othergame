@@ -1,6 +1,8 @@
 package com.comweb.controllers;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -46,18 +48,17 @@ public class CheckLogin extends HttpServlet {
 				session.setAttribute("me", me);
 				response.sendRedirect("principal");
 
-				// Si lo hay, guarda el objeto usuario en sesión
-				/*
-				 * if (id == 0) { response.sendRedirect("error-autenticacion.html"); } else {
-				 * System.out.println("id0=" + id); User user = userDb.userInfo(id);
-				 * 
-				 */
-
 			}
 //NamingException
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(500);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

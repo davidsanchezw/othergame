@@ -1,8 +1,12 @@
 package com.comweb.conection;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -23,18 +27,58 @@ public class UserDBManager {
 	 *
 	 * @param email The email from user to check.
 	 * @return The number of id, or 0 if the email and pass does not match.
+	 *         PBKDF2WithHmacSHA1
+	 * @throws InvalidKeySpecException
+	 * @throws NoSuchAlgorithmException
 	 */
 //OK
-	public Users checkLogin(String email, String pass) throws SQLException {
-		Query query = entity.createQuery("SELECT u FROM Users u WHERE u.email = :email AND pass = :pass", Users.class);
+	public Users checkLogin(String email, String pass)
+			throws SQLException, NoSuchAlgorithmException, InvalidKeySpecException {
+		entity.getTransaction().begin();
+		// Obtengo al usuario a comprobar
+		Query query = entity.createQuery("SELECT u FROM Users u WHERE u.email = :email", Users.class);
 		query.setParameter("email", email);
-		query.setParameter("pass", pass);
-		List<Users> results = query.getResultList();
-		if (results.isEmpty())
-			return null;
-		else
-			return (Users) results.get(0);
+		List<Users> me = query.getResultList();
+		entity.getTransaction().commit();
 
+		if (me.isEmpty())
+			return null;
+		else {
+			// Compruebo
+			boolean matched = validatePassword(pass, me.get(0).getSalt(), me.get(0).getPass());
+			if (matched)
+				return (Users) me.get(0);
+			else
+				return null;
+		}
+
+	}
+
+	// Metodo para checklogin
+	private static boolean validatePassword(String toCheckPassword, String storedSalt, String storedHash)
+			throws NoSuchAlgorithmException, InvalidKeySpecException {
+		int iterations = 1000;
+		byte[] salt = fromHex(storedSalt);
+		byte[] hash = fromHex(storedHash);
+
+		PBEKeySpec spec = new PBEKeySpec(toCheckPassword.toCharArray(), salt, iterations, hash.length * 8);
+		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+		byte[] testHash = skf.generateSecret(spec).getEncoded();
+
+		int diff = hash.length ^ testHash.length;
+		for (int i = 0; i < hash.length && i < testHash.length; i++) {
+			diff |= hash[i] ^ testHash[i];
+		}
+		return diff == 0;
+	}
+
+	// Metodo para checklogin
+	private static byte[] fromHex(String hex) throws NoSuchAlgorithmException {
+		byte[] bytes = new byte[hex.length() / 2];
+		for (int i = 0; i < bytes.length; i++) {
+			bytes[i] = (byte) Integer.parseInt(hex.substring(2 * i, 2 * i + 2), 16);
+		}
+		return bytes;
 	}
 
 	/**
