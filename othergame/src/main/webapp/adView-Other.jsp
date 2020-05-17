@@ -4,7 +4,7 @@
 <%@ page import='com.comweb.model.Users'%>
 <%@ page import='com.comweb.model.StatusPostTxt'%>
 <%@ page import='com.comweb.model.Matches'%>
-<%@ page import='java.util.List' %>
+<%@ page import='java.util.List'%>
 
 
 
@@ -52,15 +52,15 @@
 
 	<%
 		Matches match1 = (Matches) request.getAttribute("match1");
-		Matches match2 = (Matches) request.getAttribute("match2");
+	Matches match2 = (Matches) request.getAttribute("match2");
 
 	if (match1 != null) {
 	%>
-	
+
 	<h2>Propuesta con solo un artículo definido en curso</h2>
-	
+
 	<div>
-		<form action="mySingleMatchStarted" method="post">
+		<form action="matchView" method="get">
 			<input type="hidden" name="idMatch" value=<%=match1.getId()%> />
 			<p><%=match1.toString()%></p>
 			<input type="submit" value="Ver propuesta" />
@@ -71,16 +71,16 @@
 			value=<%=match1.getId()%> /> <input type="submit"
 			value="Cancelar propuesta" />
 	</form>
-	
+
 	<%
-		}else	if (match2 != null) {
-	%>	
+		} else if (match2 != null) {
+	%>
 	<h2>Propuesta con dos artículos definidos en curso</h2>
 	<%
 		
 	%>
 	<div>
-		<form action="mySingleMatchStarted" method="post">
+		<form action="matchView" method="get">
 			<input type="hidden" name="idMatch" value=<%=match2.getId()%> />
 			<p><%=match2.toString()%></p>
 			<input type="submit" value="Ver propuesta" />
@@ -91,7 +91,7 @@
 			value=<%=match2.getId()%> /> <input type="submit"
 			value="Cancelar propuesta" />
 	</form>
-	
+
 	<%
 		} else {
 	%>
@@ -102,8 +102,19 @@
 		</form>
 	</div>
 	<%
-		} 
+		}
 	%>
 	
+	<div>
+		<%
+			Users otherUser = (Users) request.getAttribute("otherUser");
+		%>
+		<h2><%=otherUser.getPublicName()%></h2>
+		<form action="otherProfile" method="get">
+			<input type="hidden" name="idOtherUser" value=<%=otherUser.getId()%> />
+			<input type="submit" value="Ver perfil" />
+		</form>
+	</div>
+
 </body>
 </html>

@@ -21,13 +21,13 @@
 	<input type="button" onclick=" window.location.href='myprofile' "
 		value="Mi perfil">
 
-
+	<h1>Propuestas completadas de <%=otherUser.getPublicName() %></h1>
 	<form action="otherProfile" method="get">
 		<input type="hidden" name="idOtherUser" value=<%=otherUser.getId()%> />
 		<input type="submit"
 			value="Volver al perfil de <%=otherUser.getPublicName()%>" />
 	</form>
-	<h1><%=request.getAttribute("title")%></h1>
+	
 	<%
 		List<Matches> matches = (List<Matches>) request.getAttribute("matches");
 	if (matches.size() < 1) {
@@ -48,11 +48,7 @@
 		</tr>
 	</table>
 	<div>
-	<p><%=match.toString()%></p>
-		<form action="singleMatch" method="get">
-			<input type="hidden" name="idMatch" value=<%=match.getId()%> />
-						<input type="submit" value="Ver" />
-		</form>
+	<p><%=match.toString()%></p>		
 	</div>
 	<%
 		}

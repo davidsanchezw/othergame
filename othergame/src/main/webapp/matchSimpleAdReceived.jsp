@@ -28,7 +28,7 @@
 	<%
 		Matches match = (Matches) request.getAttribute("match");
 	%>
-<form action="matchOtherAdsOffered" method="post">
+<form action="matchViewOtherAdsOffered" method="get">
 					 <input type="hidden" name="idMatch" value=<%= match.getId() %> />
 					 <p><%= match.toString() %></p>
 					 <input type="submit" value="Ver los anuncios del otro usuario" />

@@ -32,11 +32,6 @@
 			<td><%=me.getEmail()%></td>
 		</tr>
 		<tr>
-			<td>Contraseña:</td>
-			<td><%=me.getPass()%></td>
-		</tr>
-
-		<tr>
 			<td>Descripción:</td>
 			<td><%=me.getExplanation()%></td>
 		</tr>

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import com.comweb.conection.AdDBManager;
 import com.comweb.conection.DBManager;
 import com.comweb.conection.MatchDBManager;
+import com.comweb.conection.UserDBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.Matches;
 import com.comweb.model.Users;
@@ -34,6 +35,7 @@ public class AdViewOther extends HttpServlet {
 		} else {
 			try (DBManager db = new DBManager()) {
 				AdDBManager adDb = new AdDBManager(db);
+				UserDBManager userDb = new UserDBManager(db);
 				MatchDBManager matchDb = new MatchDBManager(db);
 
 				// Obtengo parametro
@@ -50,6 +52,10 @@ public class AdViewOther extends HttpServlet {
 					// Obtiene matches relacionados
 					Matches match2 = (Matches) matchDb.getMatchRelationated(idAd, 2, me.getId());
 					request.setAttribute("match2", match2);
+
+					// Obtienes datos basicos del usuario
+					Users otherUser = userDb.getSimpleUserByAd(idAd);
+					request.setAttribute("otherUser", otherUser);
 
 					RequestDispatcher rd = request.getRequestDispatcher("adView-Other.jsp");
 					rd.forward(request, response);

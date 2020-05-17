@@ -18,14 +18,14 @@ import com.comweb.model.Ads;
 import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
-@WebServlet("/matchOtherAdsOffered")
-public class MatchOtherAdsOffered extends HttpServlet {
+@WebServlet("/matchViewOtherAdsOffered")
+public class MatchViewOtherAdsOffered extends HttpServlet {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
 		HttpSession session = request.getSession();
 
@@ -37,7 +37,7 @@ public class MatchOtherAdsOffered extends HttpServlet {
 				MatchDBManager matchDb = new MatchDBManager(db);
 				AdDBManager adDb = new AdDBManager(db);
 
-				// Modificar match a confirmado e invalidar anuncios
+				// Modificar match a
 				int idMatch = Integer.parseInt(request.getParameter("idMatch"));
 
 				Matches currentMatch = matchDb.getMatch(idMatch);
@@ -47,7 +47,7 @@ public class MatchOtherAdsOffered extends HttpServlet {
 
 				request.setAttribute("otherAds", otherAds);
 
-				RequestDispatcher rd = request.getRequestDispatcher("matchOtherAdsOffered.jsp");
+				RequestDispatcher rd = request.getRequestDispatcher("matchView-OtherAdsOffered.jsp");
 				rd.forward(request, response);
 
 //NamingException

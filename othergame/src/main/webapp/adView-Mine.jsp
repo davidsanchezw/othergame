@@ -72,7 +72,7 @@
 		for (Matches match : matches1) {
 	%>
 	<div>
-		<form action="mySingleMatchStarted" method="post">
+		<form action="matchView" method="get">
 			<input type="hidden" name="idMatch" value=<%=match.getId()%> />
 			<p><%=match.toString()%></p>
 			<input type="submit" value="Ver propuesta" />
@@ -103,7 +103,7 @@
 		for (Matches match : matches2) {
 	%>
 	<div>
-		<form action="mySingleMatchStarted" method="post">
+		<form action="matchView" method="get">
 			<input type="hidden" name="idMatch" value=<%=match.getId()%> />
 			<p><%=match.toString()%></p>
 			<input type="submit" value="Ver propuesta" />

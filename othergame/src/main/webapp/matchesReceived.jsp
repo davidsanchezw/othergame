@@ -34,7 +34,7 @@
 	<p><%=match.getAd1().getNameAd()%></p>
 				<p><%=match.toString()%></p>
 	<div>
-		<form action="matchOtherAdsOffered" method="post">
+		<form action="matchViewOtherAdsOffered" method="get">
 			<input type="hidden" name="idMatch" value=<%=match.getId()%> />
 			<input type="submit" value="Ver los anuncios del otro usuario" />
 		</form>
