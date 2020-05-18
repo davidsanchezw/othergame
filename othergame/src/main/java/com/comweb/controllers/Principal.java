@@ -1,7 +1,6 @@
 package com.comweb.controllers;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -17,43 +16,46 @@ import com.comweb.conection.DBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.Users;
 
+/**
+ * Servlet que obtiene los 10 anuncios mas nuevos, permite realizar busquedas y
+ * llegar al resto de la aplicacion
+ * 
+ */
 @WebServlet("/principal")
 public class Principal extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		// Obtiene el usuario desde la sesiÃ³n. A login si no se encuentra.
-
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
-			// Buscar en base de datos al usuario con dicho email y contraseña
+
+			// Buscar en base de datos los 10 anuncios mas nuevos
 			try (DBManager db = new DBManager()) {
 				AdDBManager adDb = new AdDBManager(db);
 				int size = 10;
 				int page = 0;
 				List<Ads> principalAds = (List<Ads>) adDb.getLastAds(size, page);
-				// Reenvia la peticion a una plantilla JSP, pasando el los anuncios como
-				// atributo
+
+				// setea como atributo la lista de anuncios, el numero de pagina y la cantidad
 				request.setAttribute("principalAds", principalAds);
 				request.setAttribute("page", page);
 				request.setAttribute("quantity", adDb.getQuantity());
 
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
-				response.sendError(500);
+				response.sendRedirect("error-db.html");
 			}
-
 			RequestDispatcher rd = request.getRequestDispatcher("principal.jsp");
 			rd.forward(request, response);
-//NamingException
 		}
 	}
-
 }

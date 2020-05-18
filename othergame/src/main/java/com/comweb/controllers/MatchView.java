@@ -14,19 +14,20 @@ import com.comweb.conection.MatchDBManager;
 import com.comweb.model.Users;
 
 /**
- * Servlet que recoge los datos del .html y si es correcto manda a principal si
- * no devuelve a index
- *
+ * Servlet que comprueba que condicion cumple una propuesta
+ * 
  */
 @WebServlet("/matchView")
 public class MatchView extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
@@ -36,14 +37,12 @@ public class MatchView extends HttpServlet {
 			// Buscar en base de datos al usuario con dicho email y contraseña
 			try (DBManager db = new DBManager()) {
 				MatchDBManager matchDb = new MatchDBManager(db);
+
 				// obtiene el parametro id para autenticar
 				int idMatch = Integer.parseInt(request.getParameter("idMatch"));
-				System.out.println("aqui");
 				int caso = matchDb.matchCheck(idMatch, me.getId());
-				System.out.println(caso);
 
-				if (caso == 1) { // Estado propuesta y el usuario actual es el propietario del anuncio por el que
-									// se creó
+				if (caso == 1) { // Estado propuesta y user actual es propietario del anuncio por el que se creó
 					response.sendRedirect("matchViewOtherAdsOffered?idMatch=" + idMatch);
 				} else if (caso == 2) { // Estado aceptado, y el usuario actual es quien ha iniciado la oferta
 					response.sendRedirect("matchViewConfirmation?idMatch=" + idMatch);
@@ -54,7 +53,7 @@ public class MatchView extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				response.sendError(500);
+				response.sendRedirect("error-db.html");
 			}
 		}
 	}

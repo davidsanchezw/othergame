@@ -12,13 +12,20 @@
 <body>
 	<input type="button" onclick=" window.location.href='logout' "
 		value="Cerrar sesión">
-	<input type="button" onclick=" window.location.href='myprofile' "
-		value="Mi perfil">
 	<input type="button" onclick=" window.location.href='principal' "
 		value="Principal">
-	<input type="button" onclick=" window.location.href='publish' "
-		value="Publicar un anuncio ">
+	<input type="button" onclick=" window.location.href='myprofile' "
+		value="Mi perfil">
+
+
 	<h1>OtherGame</h1>
+	<%
+		Users me = (Users) session.getAttribute("me");
+	%>
+	<p>
+		¿Qué estás buscando hoy,
+		<%=me.getPublicName()%>?
+	</p>
 
 	<%
 		String searchTxt = (String) request.getAttribute("searchTxt");
@@ -26,11 +33,15 @@
 
 	<form method="get" action="search">
 		<input type="hidden" name="page" value="0"> <input type="text"
-			name="search" size="20" value=<%=searchTxt%> required> <input
-			type="submit" value="Buscar">
+			name="search" pattern="[A-Za-z0-9]{4,32}"
+			title="Se validan letras y números, escriba al menos 4 caracteres, y como mucho 32"
+			size="20" value=<%=searchTxt%> required> <input type="submit"
+			value="Buscar">
 	</form>
 
-
+	<p>¿Algo que ofrecer?</p>
+	<input type="button" onclick=" window.location.href='publish' "
+		value="Publicar un anuncio ">
 	<h2>
 		Resultados para:
 		<%=searchTxt%></h2>
@@ -60,7 +71,7 @@
 			}
 		%>
 		de un total de
-		<%=quantity%>		
+		<%=quantity%>
 	</p>
 	<table>
 		<%
@@ -86,8 +97,8 @@
 		if (actualPage != 0) {
 	%>
 	<form method="get" action="search">
-		<input type="hidden" name="page" value=<%=actualPage - 1%>>
-		<input type="hidden" name="search" value=<%=searchTxt%>> <input
+		<input type="hidden" name="page" value=<%=actualPage - 1%>> <input
+			type="hidden" name="search" value=<%=searchTxt%>> <input
 			type="submit" value="Anterior pág.">
 	</form>
 	<%
@@ -97,8 +108,8 @@
 		if (quantity - (20 * actualPage) > 10) {
 	%>
 	<form method="get" action="search">
-		<input type="hidden" name="page" value=<%=actualPage + 1%>>
-		<input type="hidden" name="search" value=<%=searchTxt%>> <input
+		<input type="hidden" name="page" value=<%=actualPage + 1%>> <input
+			type="hidden" name="search" value=<%=searchTxt%>> <input
 			type="submit" value="Siguiente pág.">
 	</form>
 	<%

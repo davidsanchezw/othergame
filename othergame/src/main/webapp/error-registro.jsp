@@ -1,9 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-    <%@ page import='com.comweb.model.Matches' %>
-        <%@ page import='com.comweb.model.Users' %>
-    
-    
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,12 +7,23 @@
 <title>OtherGame-Error Registro</title>
 </head>
 <body>
-<h1>Error en el registro</h1>
-        <% String errorText = (String)request.getAttribute("errorText"); %>
-        <p><%= errorText  %></p>
-        
-        		<input type="button" onclick=" window.location.href='registro.jsp' "
-		value="Registro"> 
-   
+	<h1>Error en el registro</h1>
+	<%
+		int errorTxt = (int) request.getAttribute("errorTxt");
+	%>
+	<%
+		if (errorTxt == 1) {
+	%>
+	<p>Email existente</p>
+	<%
+		} else if (errorTxt == 2) {
+	%>
+	<p>Nombre de usuario existente</p>
+	<%
+		}
+	%>
+	<input type="button" onclick=" window.location.href='registro.jsp' "
+		value="Registro">
+
 </body>
 </html>

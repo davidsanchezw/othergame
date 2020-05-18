@@ -10,21 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet que recoge los datos del .html y si es correcto manda a principal si
- * no devuelve a index
+ * Servlet que reenvía al formulario de registro
  *
  */
 @WebServlet("/register")
 public class Register extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
 		RequestDispatcher rd = request.getRequestDispatcher("registro.jsp");
 		rd.forward(request, response);
 	}
-
 }

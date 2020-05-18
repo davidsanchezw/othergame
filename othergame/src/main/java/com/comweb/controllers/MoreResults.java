@@ -17,43 +17,46 @@ import com.comweb.conection.DBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.Users;
 
+/**
+ * Servlet que obtiene los 10 anuncios de la pagina solicitada, permite realizar
+ * busquedas y llegar al resto de la aplicacion
+ *
+ */
 @WebServlet("/moreResults")
 public class MoreResults extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		// Obtiene el usuario desde la sesiÃ³n. A login si no se encuentra.
-
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
-			// Buscar en base de datos al usuario con dicho email y contraseña
+
+			// Buscar en base de datos los 10 anuncios mas nuevos de la pagina solicitada
 			try (DBManager db = new DBManager()) {
 				AdDBManager adDb = new AdDBManager(db);
 				int size = 10;
 				int page = Integer.parseInt(request.getParameter("page"));
 				List<Ads> principalAds = (List<Ads>) adDb.getLastAds(size, page);
-				// Reenvia la peticion a una plantilla JSP, pasando el los anuncios como
-				// atributo
+
+				// setea como atributo la lista de anuncios, el numero de pagina y la cantidad
 				request.setAttribute("principalAds", principalAds);
 				request.setAttribute("page", page);
 				request.setAttribute("quantity", adDb.getQuantity());
 
 			} catch (SQLException e) {
 				e.printStackTrace();
-				response.sendError(500);
+				response.sendRedirect("error-db.html");
 			}
-
 			RequestDispatcher rd = request.getRequestDispatcher("principal.jsp");
 			rd.forward(request, response);
-//NamingException
 		}
 	}
-
 }

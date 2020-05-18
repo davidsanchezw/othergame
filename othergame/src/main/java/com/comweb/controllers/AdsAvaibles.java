@@ -18,6 +18,10 @@ import com.comweb.conection.UserDBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.Users;
 
+/**
+ * Servlet que muestra los anuncios disponibles
+ *
+ */
 @WebServlet("/adsAvaibles")
 public class AdsAvaibles extends HttpServlet {
 	/**
@@ -27,8 +31,7 @@ public class AdsAvaibles extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		// Obtiene el usuario desde la sesiÃ³n. A login si no se encuentra.
-
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
@@ -40,9 +43,10 @@ public class AdsAvaibles extends HttpServlet {
 				AdDBManager adDb = new AdDBManager(db);
 				List<Ads> myAds = adDb.getUserAds(me.getId(), 1);
 				request.setAttribute("myAds", myAds);
+
 			} catch (Exception e) {
 				e.printStackTrace();
-				response.sendError(500);
+				response.sendRedirect("error-db.html");
 			}
 
 			RequestDispatcher rd = request.getRequestDispatcher("adsAvaibles.jsp");

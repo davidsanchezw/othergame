@@ -9,15 +9,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Servlet que desautentica al usuario
+ * 
+ */
 @WebServlet("/logout")
 public class LogOut extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		// Obtiene el carro de la compra desde la sesiÃ³n. Lo crea si no existe.
+		// Obtiene el usuario desde la sesion y lo invalida.
 		HttpSession session = request.getSession();
 		session.invalidate();
 		response.sendRedirect("index.jsp");

@@ -16,6 +16,10 @@ import com.comweb.conection.MatchDBManager;
 import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
+/**
+ * Servlet que muestra mis propuestas pendientes de confirmar
+ * 
+ */
 @WebServlet("/matchesPendingMe")
 public class MatchesPendingMe extends HttpServlet {
 	/**
@@ -25,8 +29,7 @@ public class MatchesPendingMe extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		// Obtiene el usuario desde la sesiÃ³n. A login si no se encuentra.
-
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
@@ -35,15 +38,15 @@ public class MatchesPendingMe extends HttpServlet {
 
 			try (DBManager db = new DBManager()) {
 				MatchDBManager matchDb = new MatchDBManager(db);
+
+				// Obtiene matches y setea
 				int usr1 = me.getId();
-				System.out.println("prueba0");
 				List<Matches> matches = (List<Matches>) matchDb.getFirstMatch(usr1, 2);
 				request.setAttribute("matches", matches);
-				request.setAttribute("title", "Propuestas pendientes de mi");
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				response.sendError(500);
+				response.sendRedirect("error-db.html");
 			}
 
 			RequestDispatcher rd = request.getRequestDispatcher("matchesPendingMe.jsp");

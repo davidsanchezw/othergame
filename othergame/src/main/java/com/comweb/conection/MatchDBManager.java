@@ -161,9 +161,27 @@ public class MatchDBManager {
 			list.next().setStatusMatchTxt(statusMatchTxt);
 		}
 
+		Date date = new Date();
+		// Modifica la hora de finalizacion
+		list = matchToCompleted.getAd1().getMatchesFirst().listIterator();
+		while (list.hasNext()) {
+			list.next().setDateEnd(date);
+		}
+		list = matchToCompleted.getAd1().getMatchesSecond().listIterator();
+		while (list.hasNext()) {
+			list.next().setDateEnd(date);
+		}
+		list = matchToCompleted.getAd2().getMatchesSecond().listIterator();
+		while (list.hasNext()) {
+			list.next().setDateEnd(date);
+		}
+		list = matchToCompleted.getAd2().getMatchesSecond().listIterator();
+		while (list.hasNext()) {
+			list.next().setDateEnd(date);
+		}
+
 		// Modifica el match a completado
 		statusMatchTxt = entity.find(StatusMatchTxt.class, 3);
-		Date date = new Date();
 		matchToCompleted.setStatusMatchTxt(statusMatchTxt);
 		matchToCompleted.setDateEnd(date);
 
@@ -220,33 +238,92 @@ public class MatchDBManager {
 		return ok;
 	}
 
-	public List<Matches> getMatchesRelationated(int idAd, int statusMatchNumber) throws SQLException {
+//OK
+	public List<Matches> getMatchesRelationatedOne(int idAd) throws SQLException {
 		entity.getTransaction().begin();
-		Ads ad = entity.find(Ads.class, idAd);
 
-		Query query = entity.createQuery(
-				"SELECT m FROM Matches m WHERE (m.ad1.id = :idAd OR m.ad2.id = :idAd) AND m.statusMatchTxt.id = :statusMatchNumber",
+		Query query = entity.createQuery("SELECT m FROM Matches m WHERE m.ad1.id = :idAd AND m.statusMatchTxt.id = 1",
 				Matches.class);
 		query.setParameter("idAd", idAd);
-		query.setParameter("statusMatchNumber", statusMatchNumber);
 
 		List<Matches> matches = (List<Matches>) query.getResultList();
 		entity.getTransaction().commit();
 		return matches;
 	}
 
-	public Matches getMatchRelationated(int idAd, int statusMatchNumber, int idUser) throws SQLException {
+	// OK
+	public List<Matches> getMatchesRelationatedTwoMe(int idAd) throws SQLException {
 		entity.getTransaction().begin();
-		Ads ad = entity.find(Ads.class, idAd);
+
+		Query query = entity.createQuery("SELECT m FROM Matches m WHERE m.ad2.id = :idAd AND m.statusMatchTxt.id = 2",
+				Matches.class);
+		query.setParameter("idAd", idAd);
+
+		List<Matches> matches = (List<Matches>) query.getResultList();
+		entity.getTransaction().commit();
+		return matches;
+	}
+
+	// OK
+	public List<Matches> getMatchesRelationatedTwoOther(int idAd) throws SQLException {
+		entity.getTransaction().begin();
+
+		Query query = entity.createQuery("SELECT m FROM Matches m WHERE m.ad1.id = :idAd AND m.statusMatchTxt.id = 2",
+				Matches.class);
+		query.setParameter("idAd", idAd);
+
+		List<Matches> matches = (List<Matches>) query.getResultList();
+		entity.getTransaction().commit();
+		return matches;
+	}
+
+//OK
+	public Matches getMatchRelationatedOne(int idAd, int idUser) throws SQLException {
+		entity.getTransaction().begin();
 
 		Query query = entity.createQuery(
-				"SELECT m FROM Matches m WHERE (m.ad1.id = :idAd OR m.ad2.id = :idAd) AND (m.usr1.id = :idUser OR m.usr2.id = :idUser) AND m.statusMatchTxt.id = :statusMatchNumber",
+				"SELECT m FROM Matches m WHERE m.ad1.id = :idAd AND m.usr1.id = :idUser AND m.statusMatchTxt.id = 1",
 				Matches.class);
 		query.setParameter("idAd", idAd);
 		query.setParameter("idUser", idUser);
-		query.setParameter("statusMatchNumber", statusMatchNumber);
-
 		List<Matches> matches = (List<Matches>) query.getResultList();
+
+		entity.getTransaction().commit();
+		if (matches.size() > 0)
+			return matches.get(0);
+		else
+			return null;
+	}
+
+	// OK
+	public Matches getMatchRelationatedTwoMe(int idAd, int idUser) throws SQLException {
+		entity.getTransaction().begin();
+
+		Query query = entity.createQuery(
+				"SELECT m FROM Matches m WHERE m.ad1.id = :idAd AND m.usr1.id = :idUser AND m.statusMatchTxt.id = 2",
+				Matches.class);
+		query.setParameter("idAd", idAd);
+		query.setParameter("idUser", idUser);
+		List<Matches> matches = (List<Matches>) query.getResultList();
+
+		entity.getTransaction().commit();
+		if (matches.size() > 0)
+			return matches.get(0);
+		else
+			return null;
+	}
+
+	// OK
+	public Matches getMatchRelationatedTwoOther(int idAd, int idUser) throws SQLException {
+		entity.getTransaction().begin();
+
+		Query query = entity.createQuery(
+				"SELECT m FROM Matches m WHERE m.ad2.id = :idAd AND m.usr2.id = :idUser AND m.statusMatchTxt.id = 2",
+				Matches.class);
+		query.setParameter("idAd", idAd);
+		query.setParameter("idUser", idUser);
+		List<Matches> matches = (List<Matches>) query.getResultList();
+
 		entity.getTransaction().commit();
 		if (matches.size() > 0)
 			return matches.get(0);
@@ -261,7 +338,6 @@ public class MatchDBManager {
 		Users me = entity.find(Users.class, idUser);
 		// Estado propuesta y el usuario actual es el propietario del anuncio por el que
 		// se creó
-		System.out.println("1");
 
 		Query query = entity.createQuery(
 				"SELECT m FROM Matches m WHERE m.usr2.id = :idUser AND m.id = :idMatch AND m.statusMatchTxt.id = 1",
@@ -269,7 +345,6 @@ public class MatchDBManager {
 		query.setParameter("idUser", idUser);
 		query.setParameter("idMatch", idMatch);
 		List<Ads> ads1 = (List<Ads>) query.getResultList();
-		System.out.println("2");
 
 		// Estado aceptado, y el usuario actual es quien ha iniciado la oferta
 		Query query2 = entity.createQuery(

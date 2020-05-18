@@ -21,13 +21,14 @@
 		value="Principal">
 	<input type="button" onclick=" window.location.href='myprofile' "
 		value="Mi perfil">
+		
+	<h1>OtherGame</h1>
 	<%
 		Ads otherAd = (Ads) request.getAttribute("otherAd");
 	%>
-	<h1>
+	<h2>
 		Otro anuncio:
-		<%=otherAd.getNameAd()%></h1>
-
+		<%=otherAd.getNameAd()%></h2>
 
 	<div>
 		<table>
@@ -51,19 +52,18 @@
 	</div>
 
 	<%
-		Matches match1 = (Matches) request.getAttribute("match1");
+		Users otherUser = (Users) request.getAttribute("otherUser");
+	Matches match1 = (Matches) request.getAttribute("match1");
 	Matches match2 = (Matches) request.getAttribute("match2");
+	Matches match3 = (Matches) request.getAttribute("match3");
 
 	if (match1 != null) {
 	%>
-
-	<h2>Propuesta con solo un artículo definido en curso</h2>
-
 	<div>
+		<h3>Pendiente de que el usuario te solicite un articulo a cambio</h3>
 		<form action="matchView" method="get">
-			<input type="hidden" name="idMatch" value=<%=match1.getId()%> />
-			<p><%=match1.toString()%></p>
-			<input type="submit" value="Ver propuesta" />
+			<input type="hidden" name="idMatch" value=<%=match1.getId()%> /> <input
+				type="submit" value="Ver propuesta" />
 		</form>
 	</div>
 	<form action="matchtocancelled" method="post">
@@ -75,15 +75,17 @@
 	<%
 		} else if (match2 != null) {
 	%>
-	<h2>Propuesta con dos artículos definidos en curso</h2>
-	<%
-		
-	%>
+	<h3>Tienes pendiente confirmar o cancelar la siguiente propuesta:</h3>
+	<p>
+		<b>Solicitas: </b>
+		<%=match2.getAd1().getNameAd()%></p>
+	<p>
+		<b>Te solicita: </b>
+		<%=match2.getAd2().getNameAd()%></p>
 	<div>
 		<form action="matchView" method="get">
-			<input type="hidden" name="idMatch" value=<%=match2.getId()%> />
-			<p><%=match2.toString()%></p>
-			<input type="submit" value="Ver propuesta" />
+			<input type="hidden" name="idMatch" value=<%=match2.getId()%> /> <input
+				type="submit" value="Ver propuesta" />
 		</form>
 	</div>
 	<form action="matchtocancelled" method="post">
@@ -91,6 +93,30 @@
 			value=<%=match2.getId()%> /> <input type="submit"
 			value="Cancelar propuesta" />
 	</form>
+	<%
+		} else if (match3 != null) {
+	%>
+
+	<h3>A la espera de respuesta de la siguiente propuesta:</h3>
+	<p>
+		<b>Te solicita: </b>
+		<%=match3.getAd1().getNameAd()%></p>
+	<p>
+		<b>Solicitas: </b>
+		<%=match3.getAd2().getNameAd()%></p>
+
+	<div>
+		<form action="matchView" method="get">
+			<input type="hidden" name="idMatch" value=<%=match3.getId()%> /> <input
+				type="submit" value="Ver propuesta" />
+		</form>
+	</div>
+	<form action="matchtocancelled" method="post">
+		<input type="hidden" name="idMatchToCancelled"
+			value=<%=match3.getId()%> /> <input type="submit"
+			value="Cancelar propuesta" />
+	</form>
+
 
 	<%
 		} else {
@@ -104,12 +130,9 @@
 	<%
 		}
 	%>
-	
+
 	<div>
-		<%
-			Users otherUser = (Users) request.getAttribute("otherUser");
-		%>
-		<h2><%=otherUser.getPublicName()%></h2>
+		<h3>Propietario: <%=otherUser.getPublicName()%></h3>
 		<form action="otherProfile" method="get">
 			<input type="hidden" name="idOtherUser" value=<%=otherUser.getId()%> />
 			<input type="submit" value="Ver perfil" />

@@ -17,12 +17,12 @@
 		value="Mi perfil">
 	<input type="button" onclick=" window.location.href='publish' "
 		value="Publicar un anuncio">
-<h1>OtherGame</h1>
-<h2>Mis anuncios retirados</h2>
-	
+	<h1>OtherGame</h1>
+	<h2>Mis anuncios retirados</h2>
+
 	<%
-		List<Ads> myAds = (List<Ads>) request.getAttribute("myAds");
-	if (myAds.size() < 1) {
+		List<Ads> adsRetired = (List<Ads>) request.getAttribute("adsRetired");
+	if (adsRetired.size() < 1) {
 	%>
 	<p>No hay anuncios disponibles</p>
 
@@ -31,22 +31,23 @@
 	%>
 
 	<%
-		for (Ads ad : myAds) {
+		for (Ads adRetired : adsRetired) {
 	%>
-	
+
 	<table>
-			<tr>
-				<td><%=ad.getNameAd()%></td>
-			</tr>			
-		</table>
+		<tr>
+			<td><%=adRetired.getNameAd()%></td>
+		</tr>
+	</table>
 	<div>
-		<form action="mySingleAd" method="post">
-			<input type="hidden" name="idAd" value=<%=ad.getId()%> />
-			<input type="submit" value="Ver" />
+		<form action="adViewRetired" method="post">
+			<input type="hidden" name="idAd" value=<%=adRetired.getId()%> /> <input
+				type="submit" value="Ver" />
 		</form>
 		<form action="adToRestored" method="post">
-			<input type="hidden" name="idAdToRestored" value=<%=ad.getId()%> />
-			<input type="submit" value="Restaurar" />
+			<input type="hidden" name="idAdToRestored"
+				value=<%=adRetired.getId()%> /> <input type="submit"
+				value="Restaurar" />
 		</form>
 	</div>
 	<%

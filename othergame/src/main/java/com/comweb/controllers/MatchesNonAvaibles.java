@@ -17,17 +17,21 @@ import com.comweb.model.Matches;
 import com.comweb.model.StatusMatchTxt;
 import com.comweb.model.Users;
 
+/**
+ * Servlet que muestra mis propuestas no disponibles
+ * 
+ */
 @WebServlet("/matchesNonAvaibles")
-public class MatchesNonAvaible extends HttpServlet {
+public class MatchesNonAvaibles extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		// Obtiene el usuario desde la sesiÃ³n. A login si no se encuentra.
-
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
@@ -36,20 +40,20 @@ public class MatchesNonAvaible extends HttpServlet {
 
 			try (DBManager db = new DBManager()) {
 				MatchDBManager matchDb = new MatchDBManager(db);
+
+				// Obtiene propuestas y setea
 				int statusMatchNumber = 5;
 				int usr = me.getId();
-				System.out.println("prueba0");
 				List<Matches> matches = (List<Matches>) matchDb.getEndedMatch(usr, statusMatchNumber);
 				request.setAttribute("matches", matches);
 				StatusMatchTxt statusMatchTxt = matchDb.getstatusMatchTxt(statusMatchNumber);
-				request.setAttribute("title", "Propuestas " + statusMatchTxt.getTxt());
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				response.sendError(500);
+				response.sendRedirect("error-db.html");
 			}
 
-			RequestDispatcher rd = request.getRequestDispatcher("matchesView.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("matchesNonAvaibles.jsp");
 			rd.forward(request, response);
 		}
 	}

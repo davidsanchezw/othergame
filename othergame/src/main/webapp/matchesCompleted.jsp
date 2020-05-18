@@ -1,30 +1,41 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language='java' contentType='text/html;charset=utf-8'%>
+<%@ page import='com.comweb.model.StatusMatchTxt'%>
 <%@ page import='com.comweb.model.Matches'%>
 <%@ page import='com.comweb.model.Users'%>
-
-
+<%@ page import='com.comweb.model.Ads'%>
+<%@ page import='java.util.List'%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>OtherGame-Propuesta espera</title>
+<title>OtherGame-Mis completados</title>
 </head>
 <body>
 	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión">
-
+		value="Cerrar sesiÃ³n ">
 	<input type="button" onclick=" window.location.href='principal' "
 		value="Principal">
 	<input type="button" onclick=" window.location.href='myprofile' "
 		value="Mi perfil">
 
 	<h1>OtherGame</h1>
-	<h2>Propuesta en curso en espera de respuesta</h2>
+	<h2>Mis completados</h2>
 	<%
-		Matches match = (Matches) request.getAttribute("match");
+		List<Matches> matches = (List<Matches>) request.getAttribute("matches");
 	Users me = (Users) session.getAttribute("me");
+
+	if (matches.size() < 1) {
 	%>
+	<p>No hay propuestas disponibles</p>
+	<%
+		} else {
+	%>
+
+	<%
+		for (Matches match : matches) {
+	%>
+	<div>
+
 	<table>
 		<thead>
 			<tr>
@@ -73,47 +84,15 @@
 
 			</tr>
 			<tr>
-				<td>Anuncio solicitado</td>
-				<td>Anuncio solicitado</td>
+				<td><b>Anuncio solicitado</b></td>
+				<td><b>Anuncio solicitado</b></td>
 			</tr>
 			<tr>
-				<%
-					if (match.getStatusMatchTxt().getId() == 2) {
-				%>
-				<td><%=match.getAd2().getNameAd()%></td>
-				<%
-					} else {
-				%>
-				<td>Pendiente</td>
-				<%
-					}
-				%>
+				
+				<td><%=match.getAd2().getNameAd()%></td>			
+				
 				<td><%=match.getAd1().getNameAd()%></td>
-			</tr>
-			<tr>
-
-
-				<%
-					if (match.getStatusMatchTxt().getId() == 2) {
-				%>
-				<td>
-					<form action="adView" method="get">
-						<input type="hidden" name="idAd" value=<%=match.getAd2().getId()%> />
-						<input type="submit" value="Ver" />
-					</form>
-				</td>
-				<%
-					} else {
-				%>
-				<td></td>
-				<%
-					}
-				%>
-				<td><form action="adView" method="get">
-						<input type="hidden" name="idAd" value=<%=match.getAd1().getId()%> />
-						<input type="submit" value="Ver" />
-					</form></td>
-			</tr>
+			</tr>			
 		</tbody>
 	</table>
 	<div>
@@ -129,12 +108,26 @@
 					<td><%=match.getDatePreEnd()%></td>
 				</tr>
 				<%} %>
+				<tr>
+					<td><b>Fin: </b></td>
+					<td><%=match.getDateEnd()%></td>
+				</tr>
+				<tr>
+					<td>---------- </td>
+					<td> </td>
+				</tr>
 			</tbody>
 		</table>	
 	</div>
-	<form action="matchtocancelled" method="post">
-		<input type="hidden" name="idMatchToCancelled"
-			value=<%=match.getId()%> /> <input type="submit" value="Cancelar" />
-	</form>
+		
+		
+	</div>
+	<%
+		}
+	%>
+	<%
+		}
+	%>
+
 </body>
 </html>

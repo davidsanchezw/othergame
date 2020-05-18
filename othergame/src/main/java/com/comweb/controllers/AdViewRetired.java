@@ -12,21 +12,25 @@ import javax.servlet.http.HttpSession;
 
 import com.comweb.conection.AdDBManager;
 import com.comweb.conection.DBManager;
-import com.comweb.conection.UserDBManager;
+import com.comweb.conection.MatchDBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.Users;
 
-@WebServlet("/mySingleAd")
-public class MySingleAd extends HttpServlet {
+/**
+ * Servlet que muestra un anuncio retirado
+ *
+ */
+@WebServlet("/adViewRetired")
+public class AdViewRetired extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		// Obtiene el usuario desde la sesiÃ³n. A login si no se encuentra.
-
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
@@ -35,23 +39,19 @@ public class MySingleAd extends HttpServlet {
 
 			try (DBManager db = new DBManager()) {
 				AdDBManager adDb = new AdDBManager(db);
-				UserDBManager userDb = new UserDBManager(db);
+				MatchDBManager matchDb = new MatchDBManager(db);
 
 				int idAd = Integer.parseInt(request.getParameter("idAd"));
-				Ads singleAd = adDb.getAd(idAd);
-				request.setAttribute("singleAd", singleAd);
+				Ads adRetired = adDb.getAd(idAd);
+				request.setAttribute("adRetired", adRetired);
 
-				Users simpleUser = userDb.getSimpleUserByAd(idAd);
-				request.setAttribute("simpleUser", simpleUser);
+				RequestDispatcher rd = request.getRequestDispatcher("adView-Retired.jsp");
+				rd.forward(request, response);
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				response.sendError(500);
+				response.sendRedirect("error-db.html");
 			}
-
-			RequestDispatcher rd = request.getRequestDispatcher("mySingleAd.jsp");
-			rd.forward(request, response);
 		}
 	}
-
 }

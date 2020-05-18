@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@ page import='com.comweb.model.Users'%>
 <%@ page import='com.comweb.model.Ads'%>
 <%@ page import='java.util.List'%>
@@ -19,12 +21,13 @@
 	<%
 		Users otherUser = (Users) request.getAttribute("otherUser");
 	%>	
-	<h1>Perfil de <%=otherUser.getPublicName() %></h1>
+	<h1>OtherGame</h1>
+	<h2>Perfil de <%=otherUser.getPublicName() %></h2>
 	
 	
 		<p>Descripción: <%=otherUser.getExplanation()%></p>
 		
-		<h2>Propuestas</h2>
+		<h2>Propuestas finalizadas</h2>
 	
 	<form action="otherMatches" method="get"> 
 				<input type="hidden" name="idUser" value=<%=otherUser.getId()%> />

@@ -3,7 +3,6 @@ package com.comweb.controllers;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,16 +16,17 @@ import com.comweb.conection.UserDBManager;
 import com.comweb.model.Users;
 
 /**
- * Servlet que recoge los datos del .html y si es correcto manda a principal si
- * no devuelve a index
+ * Servlet que recoge los datos del html y si es correcto manda a principal si
+ * no devuelve a error de autanticacion
  *
  */
-@WebServlet("/check")
+@WebServlet("/checkLogin")
 public class CheckLogin extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
@@ -44,21 +44,18 @@ public class CheckLogin extends HttpServlet {
 			if (me == null)
 				response.sendRedirect("error-autenticacion.html");
 			else {
-				System.out.println("id1=" + me.getId());
 				session.setAttribute("me", me);
 				response.sendRedirect("principal");
-
 			}
-//NamingException
-		} catch (SQLException e) {
-			e.printStackTrace();
-			response.sendError(500);
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			response.sendRedirect("error-pass.html");
 		} catch (InvalidKeySpecException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			response.sendRedirect("error-pass.html");
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.sendRedirect("error-db.html");
 		}
 	}
 

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.sql.SQLException;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -14,27 +13,31 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.comweb.conection.DBManager;
 import com.comweb.conection.UserDBManager;
 import com.comweb.model.Users;
 
+/**
+ * Servlet que cra un nuevo usuario Comprueba si existe el email o nicname y
+ * hashea la contraseña
+ *
+ */
 @WebServlet("/createUser")
 public class CreateUser extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-
-	private static byte[] getSalt() throws NoSuchAlgorithmException {
+	private static byte[] getSalt() throws NoSuchAlgorithmException { // Metodo obtener salt
 		SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
 		byte[] salt = new byte[16];
 		sr.nextBytes(salt);
 		return salt;
 	}
 
-	private static String toHex(byte[] array) throws NoSuchAlgorithmException {
+	private static String toHex(byte[] array) throws NoSuchAlgorithmException { // Metodo binario a hexadecimal
 		BigInteger bi = new BigInteger(1, array);
 		String hex = bi.toString(16);
 		int paddingLength = (array.length * 2) - hex.length();
@@ -47,9 +50,7 @@ public class CreateUser extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		HttpSession session = request.getSession();
-
-		// obtiene los parametros para autenticar
+		// obtiene los parametros para registrar
 		String uemail = request.getParameter("uemail");
 		String usr = request.getParameter("usr");
 		String psw = request.getParameter("psw");
@@ -60,25 +61,23 @@ public class CreateUser extends HttpServlet {
 		try {
 			salt = getSalt();
 		} catch (NoSuchAlgorithmException e3) {
-			// TODO Auto-generated catch block
 			e3.printStackTrace();
+			response.sendRedirect("error-pass.html");
 		}
 
-		// Pasa a hex
+		// Binario a hex
 		String saltTxt = null;
 		try {
 			saltTxt = toHex(salt);
 		} catch (NoSuchAlgorithmException e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
+			response.sendRedirect("error-pass.html");
 		}
 
-		System.out.println("1");
 		// Generar Hash
 		int iterations = 1000;
 		char[] chars = psw.toCharArray();
 		byte[] hash = null;
-		System.out.println("2");
 
 		PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, 64 * 8);
 		SecretKeyFactory skf;
@@ -87,8 +86,8 @@ public class CreateUser extends HttpServlet {
 			hash = skf.generateSecret(spec).getEncoded();
 
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			response.sendRedirect("error-pass.html");
 		}
 
 		// Pasa a hex
@@ -96,8 +95,8 @@ public class CreateUser extends HttpServlet {
 		try {
 			hashTxt = toHex(hash);
 		} catch (NoSuchAlgorithmException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			response.sendRedirect("error-pass.html");
 		}
 
 		Users user = new Users(uemail, saltTxt, hashTxt, usr, desc);
@@ -107,24 +106,29 @@ public class CreateUser extends HttpServlet {
 			UserDBManager userDb = new UserDBManager(db);
 			boolean emailAvalaible = userDb.emailAvalaible(uemail);
 			boolean nicknameAvalaible = userDb.nicknameAvalaible(usr);
+
+			// Check email existente
 			if (!emailAvalaible) {
-				request.setAttribute("errorText", "Email existente");
+				request.setAttribute("errorTxt", 1);
 				RequestDispatcher rd = request.getRequestDispatcher("error-registro.jsp");
 				rd.forward(request, response);
 
+				// Check nick existente
 			} else if (!nicknameAvalaible) {
-				request.setAttribute("errorText", "Nombre de usuario existente");
+				request.setAttribute("errorTxt", 2);
 				RequestDispatcher rd = request.getRequestDispatcher("error-registro.jsp");
 				rd.forward(request, response);
 			} else {
-
+				// Crea usuario
 				int id = userDb.createUser(user);
-				response.sendRedirect("noticeRegistered");
+				if (id > 0)
+					response.sendRedirect("noticeRegistered");
+				else
+					response.sendRedirect("error-db.html");
 			}
-//NamingException
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-			response.sendError(500);
+			response.sendRedirect("error-db.html");
 		}
 	}
 

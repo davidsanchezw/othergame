@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,23 +21,26 @@ import com.comweb.model.Users;
 
 @WebServlet("/createMatch")
 public class CreateMatch extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
-
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
+
 			try (DBManager db = new DBManager()) {
 				AdDBManager adDb = new AdDBManager(db);
 				MatchDBManager matchDb = new MatchDBManager(db);
-				//
+
+				// Ontengo caracteristicas
 				int idAd = Integer.parseInt(request.getParameter("idAd"));
 				Users usr2 = adDb.getUserAd(idAd);
 				Ads ad1 = adDb.getAd(idAd);
@@ -46,26 +48,20 @@ public class CreateMatch extends HttpServlet {
 				StatusMatchTxt statusMatchTxt = matchDb.getstatusMatchTxt(statusMatchNumber);
 				Date dateStart = new Date();
 
+				// Contruyo nuevo match
 				Matches match = new Matches(me, usr2, ad1, null, statusMatchTxt, dateStart);
 
-				// Buscar en base de datos al usuario con dicho email y contraseña
+				// Lo crea y si hay algun problema redirecciona a error
+				int idMatch = matchDb.createMatch(match);
+				if (idMatch > 0) {
+					response.sendRedirect("matchView?idMatch=" + idMatch);
+				} else
+					response.sendRedirect("error-db.html");
 
-				System.out.println("id = 0");
-
-				int id = matchDb.createMatch(match);
-				System.out.println("id = " + id);
-				Matches singleMatch = matchDb.getMatch(id);
-				request.setAttribute("singleMatch", singleMatch);
-
-				RequestDispatcher rd = request.getRequestDispatcher("mySingleMatchStarted.jsp");
-				rd.forward(request, response);
-
-//NamingException
 			} catch (SQLException e) {
 				e.printStackTrace();
-				response.sendError(500);
+				response.sendRedirect("error-db.html");
 			}
 		}
 	}
-
 }

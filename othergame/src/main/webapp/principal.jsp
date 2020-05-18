@@ -11,7 +11,7 @@
 </head>
 <body>
 	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión ">
+		value="Cerrar sesión">
 	<input type="button" onclick=" window.location.href='myprofile' "
 		value="Mi perfil">
 	<h1>OtherGame</h1>
@@ -25,8 +25,9 @@
 
 	<form method="get" action="search">
 		<input type="hidden" name="page" value="0"> <input type="text"
-			name="search" size="20" required> <input type="submit"
-			value="Buscar">
+			name="search" pattern="[A-Za-z0-9]{4,32}"
+			title="Se validan letras y números, escriba al menos 4 caracteres, y como mucho 32"
+			size="20" required> <input type="submit" value="Buscar">
 	</form>
 
 
@@ -60,7 +61,7 @@
 			}
 		%>
 		de un total de
-		<%=quantity%>		
+		<%=quantity%>
 	</p>
 	<table>
 		<%

@@ -19,34 +19,38 @@ import com.comweb.model.Users;
 
 @WebServlet("/otherMatches")
 public class OtherMatches extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		// Obtiene el usuario desde la sesiÃ³n. A login si no se encuentra.
-
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
+
 			RequestDispatcher rd = null;
 			try (DBManager db = new DBManager()) {
 				MatchDBManager matchDb = new MatchDBManager(db);
 				UserDBManager userDb = new UserDBManager(db);
+
+				// Obtengo otro usuario y lo seteo
 				int idUser = Integer.parseInt(request.getParameter("idUser"));
 				Users otherUser = userDb.getOtherUser(idUser);
 				request.setAttribute("otherUser", otherUser);
 
+				// Obtengo loas propuestas finalizadas y seteo
 				List<Matches> matches = (List<Matches>) matchDb.getEndedMatch(idUser, 3);
 				request.setAttribute("matches", matches);
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				response.sendError(500);
+				response.sendRedirect("error-db.html");
 			}
 			rd = request.getRequestDispatcher("otherMatches.jsp");
 			rd.forward(request, response);

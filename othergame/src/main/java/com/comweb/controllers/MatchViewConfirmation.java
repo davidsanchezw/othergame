@@ -15,24 +15,31 @@ import com.comweb.conection.MatchDBManager;
 import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
+/**
+ * Servlet que lleva a la vista de confirmacion o cancelacion de una propuesta
+ * 
+ */
 @WebServlet("/matchViewConfirmation")
 public class MatchViewConfirmation extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
-
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
+
 			try (DBManager db = new DBManager()) {
 				MatchDBManager matchDb = new MatchDBManager(db);
-				// Obtiene match para ver en el jsp
+
+				// Obtiene match y lo setea
 				int idMatch = Integer.parseInt(request.getParameter("idMatch"));
 				Matches match = matchDb.getMatch(idMatch);
 				request.setAttribute("match", match);
@@ -41,9 +48,8 @@ public class MatchViewConfirmation extends HttpServlet {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				response.sendError(500);
+				response.sendRedirect("error-db.html");
 			}
 		}
 	}
-
 }

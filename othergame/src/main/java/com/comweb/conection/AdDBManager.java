@@ -1,6 +1,7 @@
 package com.comweb.conection;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -188,10 +189,14 @@ public class AdDBManager {
 	public boolean adToRetired(int idAdToRetired) {
 		boolean ok = false;
 		entity.getTransaction().begin();
+
 		// Modifica el ad a retirado
 		Ads adToRetired = entity.find(Ads.class, idAdToRetired);
 		StatusPostTxt statusPostTxt = entity.find(StatusPostTxt.class, 2);
 		adToRetired.setStatusPostTxt(statusPostTxt);
+
+		// Modifica la hora de ser retirado
+		adToRetired.setDateEnd(new Date());
 
 		// Modifica los match a no disponibles
 		StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 5);
@@ -203,6 +208,17 @@ public class AdDBManager {
 		list = adToRetired.getMatchesSecond().listIterator();
 		while (list.hasNext()) {
 			list.next().setStatusMatchTxt(statusMatchTxt);
+		}
+
+		Date date = new Date();
+		// Modifica la hora de fin de los match
+		list = adToRetired.getMatchesFirst().listIterator();
+		while (list.hasNext()) {
+			list.next().setDateEnd(date);
+		}
+		list = adToRetired.getMatchesFirst().listIterator();
+		while (list.hasNext()) {
+			list.next().setDateEnd(date);
 		}
 
 		ok = true;
@@ -245,6 +261,7 @@ public class AdDBManager {
 		return caso;
 	}
 
+//OK
 	public List<Ads> getOtherUserAdsByMatch(int idMatch) throws SQLException {
 		entity.getTransaction().begin();
 		int idUser = entity.find(Matches.class, idMatch).getUsr1().getId();

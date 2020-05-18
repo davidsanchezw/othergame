@@ -14,26 +14,23 @@ import com.comweb.model.Users;
 
 @WebServlet("/noticeRetired")
 public class NoticeRetired extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
-
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
-			try {
-				RequestDispatcher rd = request.getRequestDispatcher("notice-retired.jsp");
-				rd.forward(request, response);
-			} catch (Exception e) {
-				e.printStackTrace();
-				response.sendError(500);
-			}
+			RequestDispatcher rd = request.getRequestDispatcher("notice-retired.jsp");
+			rd.forward(request, response);
+
 		}
 	}
 }

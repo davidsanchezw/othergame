@@ -14,20 +14,23 @@ import javax.servlet.http.HttpSession;
 import com.comweb.conection.DBManager;
 import com.comweb.conection.MatchDBManager;
 import com.comweb.model.Matches;
-import com.comweb.model.StatusMatchTxt;
 import com.comweb.model.Users;
 
+/**
+ * Servlet que muestra mis propuestas canceladas
+ * 
+ */
 @WebServlet("/matchesCancelled")
 public class MatchesCancelled extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-		// Obtiene el usuario desde la sesiÃ³n. A login si no se encuentra.
-
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
@@ -38,18 +41,17 @@ public class MatchesCancelled extends HttpServlet {
 				MatchDBManager matchDb = new MatchDBManager(db);
 				int statusMatchNumber = 4;
 				int usr = me.getId();
-				System.out.println("prueba0");
+
+				// Obtiene propuestas y setea
 				List<Matches> matches = (List<Matches>) matchDb.getEndedMatch(usr, statusMatchNumber);
 				request.setAttribute("matches", matches);
-				StatusMatchTxt statusMatchTxt = matchDb.getstatusMatchTxt(statusMatchNumber);
-				request.setAttribute("title", "Propuestas " + statusMatchTxt.getTxt());
 
 			} catch (Exception e) {
 				e.printStackTrace();
-				response.sendError(500);
+				response.sendRedirect("error-db.html");
 			}
 
-			RequestDispatcher rd = request.getRequestDispatcher("matchesView.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("matchesCancelled.jsp");
 			rd.forward(request, response);
 		}
 	}

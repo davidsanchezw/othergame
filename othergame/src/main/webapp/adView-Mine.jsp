@@ -4,7 +4,7 @@
 <%@ page import='com.comweb.model.Users'%>
 <%@ page import='com.comweb.model.StatusPostTxt'%>
 <%@ page import='com.comweb.model.Matches'%>
-<%@ page import='java.util.List' %>
+<%@ page import='java.util.List'%>
 
 
 
@@ -21,14 +21,14 @@
 		value="Principal">
 	<input type="button" onclick=" window.location.href='myprofile' "
 		value="Mi perfil">
+	
+	<h1>OtherGame</h1>
 	<%
 		Ads myAd = (Ads) request.getAttribute("myAd");
 	%>
-	<h1>
+	<h2>
 		Mi anuncio:
-		<%=myAd.getNameAd()%></h1>
-
-
+		<%=myAd.getNameAd()%></h2>
 	<div>
 		<table>
 			<tr>
@@ -58,24 +58,32 @@
 	</div>
 
 
-	<h1>Propuestas en curso</h1>
 	<%
 		List<Matches> matches1 = (List<Matches>) request.getAttribute("matches1");
-	if (matches1.size() < 1) {
+	List<Matches> matches2 = (List<Matches>) request.getAttribute("matches2");
+	List<Matches> matches3 = (List<Matches>) request.getAttribute("matches3");
+	if (matches1.size() > 0 || matches2.size() > 0 || matches3.size() > 0) {
 	%>
-	<p>No hay propuestas con un artículo definido en curso</p>
+	<h2>Propuestas en curso</h2>
 	<%
 		} else {
 	%>
-	<h2>Propuestas con solo un artículo definido</h2>
+	<h3>No existen propuestas en curso</h3>
+	<%
+		}
+	if (matches1.size() > 0) {
+	%>
+	<h3>Tienes pendiente solicitar un articulo al otro usuario o
+		cancelar en las siguientes propuestas:</h3>
 	<%
 		for (Matches match : matches1) {
 	%>
 	<div>
+		<p>
+			<b>Solicitado por: </b><%=match.getUsr1().getPublicName()%></p>
 		<form action="matchView" method="get">
-			<input type="hidden" name="idMatch" value=<%=match.getId()%> />
-			<p><%=match.toString()%></p>
-			<input type="submit" value="Ver propuesta" />
+			<input type="hidden" name="idMatch" value=<%=match.getId()%> /> <input
+				type="submit" value="Ver propuesta" />
 		</form>
 	</div>
 	<form action="matchtocancelled" method="post">
@@ -85,27 +93,25 @@
 	</form>
 	<%
 		}
+
+	}
+
+	if (matches2.size() > 0) {
 	%>
-	<%
-		}
-	%>
-	
-	<%
-		List<Matches> matches2 = (List<Matches>) request.getAttribute("matches2");
-	if (matches2.size() < 1) {
-	%>
-	<p>No hay propuestas con dos artículos definidos en curso</p>
-	<%
-		} else {
-	%>
-	<h2>Propuestas con dos artículos definidos en curso</h2>
+	<h3>Tienes pendiente confirmar o cancelar las siguientes
+		propuestas:</h3>
 	<%
 		for (Matches match : matches2) {
 	%>
 	<div>
+		<p>
+			<b>Solicitas: </b>
+			<%=match.getAd1().getNameAd()%></p>
+		<p>
+			<b>Te solicita: </b>
+			<%=match.getAd2().getNameAd()%></p>
 		<form action="matchView" method="get">
 			<input type="hidden" name="idMatch" value=<%=match.getId()%> />
-			<p><%=match.toString()%></p>
 			<input type="submit" value="Ver propuesta" />
 		</form>
 	</div>
@@ -116,9 +122,36 @@
 	</form>
 	<%
 		}
+
+	}
+
+	if (matches3.size() > 0) {
 	%>
+	<h3>A la espera de respuesta de las siguientes propuestas:</h3>
+	<%
+		for (Matches match : matches3) {
+	%>
+	<div>
+		<p>
+			<b>Te solicita: </b>
+			<%=match.getAd1().getNameAd()%></p>
+		<p>
+			<b>Solicitas: </b>
+			<%=match.getAd2().getNameAd()%></p>
+
+		<form action="matchView" method="get">
+			<input type="hidden" name="idMatch" value=<%=match.getId()%> /> <input
+				type="submit" value="Ver propuesta" />
+		</form>
+	</div>
+	<form action="matchtocancelled" method="post">
+		<input type="hidden" name="idMatchToCancelled"
+			value=<%=match.getId()%> /> <input type="submit"
+			value="Cancelar propuesta" />
+	</form>
 	<%
 		}
+	}
 	%>
 
 </body>

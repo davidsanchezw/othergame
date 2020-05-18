@@ -8,17 +8,18 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>OtherGame-Propuestas recibidas</title>
 </head>
 <body>
 	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión ">
+		value="Cerrar sesión">
 	<input type="button" onclick=" window.location.href='principal' "
 		value="Principal">
 	<input type="button" onclick=" window.location.href='myprofile' "
 		value="Mi perfil">
 
-	<h1><%=request.getAttribute("title")%></h1>
+	<h1>OtherGame</h1>
+	<h2>Propuestas recibidas</h2>
 	<%
 		List<Matches> matches = (List<Matches>) request.getAttribute("matches");
 	if (matches.size() < 1) {
@@ -31,12 +32,20 @@
 	<%
 		for (Matches match : matches) {
 	%>
-	<p><%=match.getAd1().getNameAd()%></p>
-				<p><%=match.toString()%></p>
+	<p>
+		<b>Anuncio:</b>
+		<%=match.getAd1().getNameAd()%></p>
+	<form action="adView" method="get">
+		<input type="hidden" name="idAd" value=<%=match.getAd1().getId()%> />
+		<input type="submit" value="Ver" />
+	</form>
+	<p>
+		<b>Solicitado por:</b>
+		<%=match.getUsr1().getPublicName()%></p>
 	<div>
 		<form action="matchViewOtherAdsOffered" method="get">
-			<input type="hidden" name="idMatch" value=<%=match.getId()%> />
-			<input type="submit" value="Ver los anuncios del otro usuario" />
+			<input type="hidden" name="idMatch" value=<%=match.getId()%> /> <input
+				type="submit" value="Ver los anuncios del otro usuario" />
 		</form>
 	</div>
 	<form action="matchtocancelled" method="post">

@@ -19,7 +19,7 @@
 	<input type="button" onclick=" window.location.href='myprofile' "
 		value="Mi perfil">
 
-	<h1>OtherGame</h1>
+	<h1>Eliminar</h1>
 	<h2>Propuesta finalizada</h2>
 	<%
 		Matches singleMatch = (Matches) request.getAttribute("singleMatch");

@@ -4,11 +4,11 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>OtherGame-Aviso</title>
+<title>OtherGame-Anuncio restaurado</title>
 </head>
 <body>
 	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión ">
+		value="Cerrar sesión">
 	<input type="button" onclick=" window.location.href='principal' "
 		value="Principal">
 	<input type="button" onclick=" window.location.href='myprofile' "
