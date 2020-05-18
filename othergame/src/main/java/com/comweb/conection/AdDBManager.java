@@ -3,7 +3,6 @@ package com.comweb.conection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -189,42 +188,36 @@ public class AdDBManager {
 	public boolean adToRetired(int idAdToRetired) {
 		boolean ok = false;
 		entity.getTransaction().begin();
+		Query query1 = entity.createQuery("SELECT a FROM Ads a WHERE a.id = :idAdToRetired AND a.statusPostTxt.id = 1",
+				Ads.class);
+		query1.setParameter("idAdToRetired", idAdToRetired);
+		List<Ads> ads = (List<Ads>) query1.getResultList();
+		if (ads.size() > 0) {
+			// Modifica el ad a retirado
+			Ads adToRetired = ads.get(0);
+			StatusPostTxt statusPostTxt = entity.find(StatusPostTxt.class, 2);
+			adToRetired.setStatusPostTxt(statusPostTxt);
 
-		// Modifica el ad a retirado
-		Ads adToRetired = entity.find(Ads.class, idAdToRetired);
-		StatusPostTxt statusPostTxt = entity.find(StatusPostTxt.class, 2);
-		adToRetired.setStatusPostTxt(statusPostTxt);
+			// Modifica la hora de ser retirado
+			adToRetired.setDateEnd(new Date());
 
-		// Modifica la hora de ser retirado
-		adToRetired.setDateEnd(new Date());
+			// Modifica los match a no disponibles y setea fecha
+			StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 5);
+			Date date = new Date();
+			Query query2 = entity.createQuery(
+					"SELECT m FROM Matches m WHERE (m.ad1.id = :idAdToRetired OR m.ad2.id = :idAdToRetired) AND (m.statusMatchTxt.id = 1 OR m.statusMatchTxt.id = 2)",
+					Matches.class);
+			query2.setParameter("idAdToRetired", idAdToRetired);
+			List<Matches> matches = (List<Matches>) query2.getResultList();
+			for (int i = 0; i < matches.size(); i++) {
+				matches.get(i).setStatusMatchTxt(statusMatchTxt);
+				matches.get(i).setDateEnd(date);
+			}
 
-		// Modifica los match a no disponibles
-		StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 5);
-
-		ListIterator<Matches> list = adToRetired.getMatchesFirst().listIterator();
-		while (list.hasNext()) {
-			list.next().setStatusMatchTxt(statusMatchTxt);
+			ok = true;
 		}
-		list = adToRetired.getMatchesSecond().listIterator();
-		while (list.hasNext()) {
-			list.next().setStatusMatchTxt(statusMatchTxt);
-		}
-
-		Date date = new Date();
-		// Modifica la hora de fin de los match
-		list = adToRetired.getMatchesFirst().listIterator();
-		while (list.hasNext()) {
-			list.next().setDateEnd(date);
-		}
-		list = adToRetired.getMatchesFirst().listIterator();
-		while (list.hasNext()) {
-			list.next().setDateEnd(date);
-		}
-
-		ok = true;
 		entity.getTransaction().commit();
 		return ok;
-
 	}
 
 //OK
@@ -232,11 +225,16 @@ public class AdDBManager {
 		boolean ok = false;
 		entity.getTransaction().begin();
 		// Modifica el ad a retirado
-		Ads adToRetired = entity.find(Ads.class, idAdToRestoredd);
-		StatusPostTxt statusPostTxt = entity.find(StatusPostTxt.class, 1);
-		adToRetired.setStatusPostTxt(statusPostTxt);
-
-		ok = true;
+		Query query1 = entity
+				.createQuery("SELECT a FROM Ads a WHERE a.id = :idAdToRestoredd AND a.statusPostTxt.id = 2", Ads.class);
+		query1.setParameter("idAdToRestoredd", idAdToRestoredd);
+		List<Ads> ads = (List<Ads>) query1.getResultList();
+		if (ads.size() > 0) {
+			Ads adToRetired = ads.get(0);
+			StatusPostTxt statusPostTxt = entity.find(StatusPostTxt.class, 1);
+			adToRetired.setStatusPostTxt(statusPostTxt);
+			ok = true;
+		}
 		entity.getTransaction().commit();
 		return ok;
 	}

@@ -3,7 +3,6 @@ package com.comweb.conection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -30,10 +29,17 @@ public class MatchDBManager {
 	 * @throws SQLException If somthing fails with the DB.
 	 */
 	public int createMatch(Matches match) throws SQLException {
+		int id = 0;
 		entity.getTransaction().begin();
-		entity.persist(match);
+		Query query = entity.createQuery("SELECT a FROM Ads a WHERE a.id = :ad1 AND a.statusPostTxt.id = 1", Ads.class);
+		query.setParameter("ad1", match.getAd1().getId());
+		List<Ads> ads = (List<Ads>) query.getResultList();
+		if (ads.size() > 0) {
+			entity.persist(match);
+			id = match.getId();
+		}
 		entity.getTransaction().commit();
-		return match.getId();
+		return id;
 	}
 
 	/**
@@ -135,57 +141,41 @@ public class MatchDBManager {
 	public boolean matchToConfirm(int idMatchToCompleted) throws SQLException {
 		boolean ok = false;
 		entity.getTransaction().begin();
-		Matches matchToCompleted = entity.find(Matches.class, idMatchToCompleted);
 
-		// Modifica los anuncios a completados
-		StatusPostTxt statusPostTxt = entity.find(StatusPostTxt.class, 3);
-		matchToCompleted.getAd1().setStatusPostTxt(statusPostTxt);
-		matchToCompleted.getAd2().setStatusPostTxt(statusPostTxt);
+		// Primero comprueba el estado del match
+		Query query1 = entity.createQuery(
+				"SELECT m FROM Matches m WHERE m.id = :idMatchToCompleted AND m.statusMatchTxt.id = 2", Matches.class);
+		query1.setParameter("idMatchToCompleted", idMatchToCompleted);
+		List<Matches> matches1 = (List<Matches>) query1.getResultList();
+		if (matches1.size() > 0) {
+			Matches matchToCompleted = matches1.get(0);
+			// Modifica los anuncios a completados
+			StatusPostTxt statusPostTxt = entity.find(StatusPostTxt.class, 3);
+			matchToCompleted.getAd1().setStatusPostTxt(statusPostTxt);
+			matchToCompleted.getAd2().setStatusPostTxt(statusPostTxt);
 
-		// Modifica las propuestas a no disponibles
-		StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 5);
-		ListIterator<Matches> list = matchToCompleted.getAd1().getMatchesFirst().listIterator();
-		while (list.hasNext()) {
-			list.next().setStatusMatchTxt(statusMatchTxt);
-		}
-		list = matchToCompleted.getAd1().getMatchesSecond().listIterator();
-		while (list.hasNext()) {
-			list.next().setStatusMatchTxt(statusMatchTxt);
-		}
-		list = matchToCompleted.getAd2().getMatchesSecond().listIterator();
-		while (list.hasNext()) {
-			list.next().setStatusMatchTxt(statusMatchTxt);
-		}
-		list = matchToCompleted.getAd2().getMatchesSecond().listIterator();
-		while (list.hasNext()) {
-			list.next().setStatusMatchTxt(statusMatchTxt);
-		}
+			// Modifica las propuestas relacionadas a no disponibles y setea fecha
+			StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 5);
+			Date dateEnd = new Date();
 
-		Date date = new Date();
-		// Modifica la hora de finalizacion
-		list = matchToCompleted.getAd1().getMatchesFirst().listIterator();
-		while (list.hasNext()) {
-			list.next().setDateEnd(date);
-		}
-		list = matchToCompleted.getAd1().getMatchesSecond().listIterator();
-		while (list.hasNext()) {
-			list.next().setDateEnd(date);
-		}
-		list = matchToCompleted.getAd2().getMatchesSecond().listIterator();
-		while (list.hasNext()) {
-			list.next().setDateEnd(date);
-		}
-		list = matchToCompleted.getAd2().getMatchesSecond().listIterator();
-		while (list.hasNext()) {
-			list.next().setDateEnd(date);
-		}
+			Query query2 = entity.createQuery(
+					"SELECT m FROM Matches m WHERE (m.ad1.id = :idAd1 OR m.ad1.id = :idAd2 OR m.ad2.id = :idAd1 OR m.ad2.id = :idAd2) AND (m.statusMatchTxt.id = 1 OR m.statusMatchTxt.id = 2)",
+					Matches.class);
+			query2.setParameter("idAd1", matchToCompleted.getAd1().getId());
+			query2.setParameter("idAd2", matchToCompleted.getAd2().getId());
+			List<Matches> matches2 = (List<Matches>) query2.getResultList();
+			for (int i = 0; i < matches2.size(); i++) {
+				matches2.get(i).setStatusMatchTxt(statusMatchTxt);
+				matches2.get(i).setDateEnd(dateEnd);
+			}
 
-		// Modifica el match a completado
-		statusMatchTxt = entity.find(StatusMatchTxt.class, 3);
-		matchToCompleted.setStatusMatchTxt(statusMatchTxt);
-		matchToCompleted.setDateEnd(date);
+			// Modifica el match a completado
+			statusMatchTxt = entity.find(StatusMatchTxt.class, 3);
+			matchToCompleted.setStatusMatchTxt(statusMatchTxt);
+			matchToCompleted.setDateEnd(dateEnd);
 
-		ok = true;
+			ok = true;
+		}
 		entity.getTransaction().commit();
 		return ok;
 	}
@@ -200,15 +190,22 @@ public class MatchDBManager {
 	public boolean matchToCancelled(int idMatchToCancelled) throws SQLException {
 		boolean ok = false;
 		entity.getTransaction().begin();
-		Matches matchToCompleted = entity.find(Matches.class, idMatchToCancelled);
-		StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 4);
-		Date date = new Date();
+		Query query = entity.createQuery(
+				"SELECT m FROM Matches m WHERE m.id = :idMatchToCancelled AND (m.statusMatchTxt.id = 1 OR m.statusMatchTxt.id = 2)",
+				Matches.class);
+		query.setParameter("idMatchToCancelled", idMatchToCancelled);
+		List<Matches> matches = (List<Matches>) query.getResultList();
 
-		// Modifica el match a cancelled
-		matchToCompleted.setStatusMatchTxt(statusMatchTxt);
-		matchToCompleted.setDateEnd(date);
+		if (matches.size() > 0) {
+			Matches matchToCompleted = matches.get(0);
+			StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 4);
+			Date date = new Date();
 
-		ok = true;
+			// Modifica el match a cancelled y la fecha
+			matchToCompleted.setStatusMatchTxt(statusMatchTxt);
+			matchToCompleted.setDateEnd(date);
+			ok = true;
+		}
 		entity.getTransaction().commit();
 		return ok;
 	}
@@ -223,17 +220,30 @@ public class MatchDBManager {
 	public boolean matchToPending(int idMatchToPending, int idAdToPending) throws SQLException {
 		boolean ok = false;
 		entity.getTransaction().begin();
-		Matches matchToCompleted = entity.find(Matches.class, idMatchToPending);
-		StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 2);
-		Ads ad2 = entity.find(Ads.class, idAdToPending);
-		Date datePreEnd = new Date();
+		// Primero comprueba que sigue activa la propuesta
+		Query query1 = entity.createQuery(
+				"SELECT m FROM Matches m WHERE m.id = :idMatchToPending AND m.statusMatchTxt.id = 1", Matches.class);
+		query1.setParameter("idMatchToPending", idMatchToPending);
+		List<Matches> matches = (List<Matches>) query1.getResultList();
+		if (matches.size() > 0) {
+			// Segundo comprueba que el anuncio siga disponible
+			Query query2 = entity.createQuery(
+					"SELECT a FROM Ads a WHERE a.id = :idAdToPending AND a.statusPostTxt.id = 1", Ads.class);
+			query2.setParameter("idAdToPending", idAdToPending);
+			List<Ads> ads = (List<Ads>) query2.getResultList();
+			if (ads.size() > 0) {
+				StatusMatchTxt statusMatchTxt = entity.find(StatusMatchTxt.class, 2);
+				Ads ad2 = entity.find(Ads.class, idAdToPending);
+				Date datePreEnd = new Date();
 
-		// Modifica el match a cancelled
-		matchToCompleted.setStatusMatchTxt(statusMatchTxt);
-		matchToCompleted.setAd2(ad2);
-		matchToCompleted.setDatePreEnd(datePreEnd);
+				// Modifica el match a pending y setea el anuncio 2
+				matches.get(0).setStatusMatchTxt(statusMatchTxt);
+				matches.get(0).setAd2(ad2);
+				matches.get(0).setDatePreEnd(datePreEnd);
 
-		ok = true;
+				ok = true;
+			}
+		}
 		entity.getTransaction().commit();
 		return ok;
 	}

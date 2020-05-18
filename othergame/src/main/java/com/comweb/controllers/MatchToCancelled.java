@@ -42,7 +42,7 @@ public class MatchToCancelled extends HttpServlet {
 				if (estado)
 					response.sendRedirect("noticeCancelled");
 				else
-					response.sendRedirect("error-db.html");
+					response.sendRedirect("error-accion.html");
 
 			} catch (Exception e) {
 				e.printStackTrace();

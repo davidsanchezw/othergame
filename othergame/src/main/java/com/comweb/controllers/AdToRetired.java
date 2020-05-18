@@ -43,7 +43,7 @@ public class AdToRetired extends HttpServlet {
 				if (estado)
 					response.sendRedirect("noticeRetired");
 				else
-					response.sendRedirect("error-db.html");
+					response.sendRedirect("error-accion.html");
 
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -42,7 +42,7 @@ public class AdToRestored extends HttpServlet {
 				if (estado)
 					response.sendRedirect("noticeRestored");
 				else
-					response.sendRedirect("error-db.html");
+					response.sendRedirect("error-accion.html");
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendRedirect("error-db.html");

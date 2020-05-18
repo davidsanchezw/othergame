@@ -1,4 +1,5 @@
-<%@ page language='java' contentType='text/html;charset=utf-8'%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@ page import='com.comweb.model.Users'%>
 <%@ page import='com.comweb.model.Ads'%>
 <%@ page import='java.util.List'%>
@@ -10,14 +11,15 @@
 </head>
 <body>
 	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesiÃ³n">
+		value="Cerrar sesión">
 	<input type="button" onclick=" window.location.href='principal' "
 		value="Principal">
 
 
 	<h1>OtherGame</h1>
 	<h2>Mi perfil</h2>
-	<p>AquÃ­ puedes ver tus propuestas en proceso, propuestas finalizadas, y tus anuncios</p>
+	<p>Aquí puedes ver tus propuestas en proceso, propuestas
+		finalizadas, y tus anuncios</p>
 	<%
 		Users me = (Users) session.getAttribute("me");
 	%>
@@ -32,13 +34,13 @@
 			<td><%=me.getEmail()%></td>
 		</tr>
 		<tr>
-			<td>DescripciÃ³n:</td>
+			<td>Descripción:</td>
 			<td><%=me.getExplanation()%></td>
 		</tr>
 	</table>
-	
+
 	<h2>Mis propuestas</h2>
-	
+
 	<h3>En proceso</h3>
 	<form action="matchesStarted" method="get">
 		<input type="submit" value="Propuestas iniciadas" />
@@ -51,7 +53,7 @@
 			value="Propuestas respondidas, pendientes de otro" />
 	</form>
 	<form action="matchesPendingMe" method="get">
-		<input type="submit" value="Propuestas pendientes de mÃ­" />
+		<input type="submit" value="Propuestas pendientes de mí" />
 	</form>
 	<h3>Finalizadas</h3>
 	<form action="matchesCompleted" method="get">

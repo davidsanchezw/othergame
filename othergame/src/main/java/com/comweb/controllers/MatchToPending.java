@@ -48,7 +48,7 @@ public class MatchToPending extends HttpServlet {
 				if (estado)
 					response.sendRedirect("noticePending");
 				else
-					response.sendRedirect("error-db.html");
+					response.sendRedirect("error-accion.html");
 
 			} catch (Exception e) {
 				e.printStackTrace();

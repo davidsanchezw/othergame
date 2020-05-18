@@ -1,28 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="ISO-8859-1">
 <title>OtherGame-Login</title>
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 
-	<h1>OtherGame</h1>
-	<h2>Introduce tu correo y contraseña</h2>
-
-	<form action="check" method="post">
-
-		<div class="container">
-			<label for="uemail"><b>Email:</b></label> <input type="text"
-				placeholder="Introduce tu email" name="uemail" required> <label
-				for="psw"><b>Contraseña:</b></label> <input type="password"
-				placeholder="Introduce tu contraseña" name="psw" required>
-
-			<button type="submit">Entrar</button>
+	<form autocomplete='off' class='form' action="checkLogin" method="post">
+		<div class='control'>
+			<h1>OtherGame</h1>
+			<h2>Autenticación</h2>
 		</div>
+
+		<div class='control block-cube block-input'>
+			<input type="text" class="form-control"
+				placeholder="Introduce tu email" name="uemail" required>
+			<div class='bg-top'>
+				<div class='bg-inner'></div>
+			</div>
+			<div class='bg-right'>
+				<div class='bg-inner'></div>
+			</div>
+			<div class='bg'>
+				<div class='bg-inner'></div>
+			</div>
+		</div>
+		<div class='control block-cube block-input'>
+			<input type="password" class="form-control"
+				placeholder="Introduce tu contraseña" name="psw" required>
+			<div class='bg-top'>
+				<div class='bg-inner'></div>
+			</div>
+			<div class='bg-right'>
+				<div class='bg-inner'></div>
+			</div>
+			<div class='bg'>
+				<div class='bg-inner'></div>
+			</div>
+		</div>
+
+		<button class='btn block-cube block-cube-hover' type="submit"
+			type='button'>
+			<div class='bg-top'>
+				<div class='bg-inner'></div>
+			</div>
+			<div class='bg-right'>
+				<div class='bg-inner'></div>
+			</div>
+			<div class='bg'>
+				<div class='bg-inner'></div>
+			</div>
+			<div class='text'>Entrar</div>
+		</button>
+
+		<button class='btn block-cube block-cube-hover' type='button'
+			onclick=" window.location.href='register'">
+			<div class='bg-top'>
+				<div class='bg-inner'></div>
+			</div>
+			<div class='bg-right'>
+				<div class='bg-inner'></div>
+			</div>
+			<div class='bg'>
+				<div class='bg-inner'></div>
+			</div>
+			<div class='text'>Registrarse</div>
+		</button>
+
 	</form>
-	<h2>¿Aún no formas parte de esta gran comunidad?</h2>
-	<form action="register" method="get">
-		<button type="submit">Registrarse</button>
-	</form>
+
 </body>
+</html>

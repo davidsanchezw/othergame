@@ -46,7 +46,7 @@ public class MatchToCompleted extends HttpServlet {
 				if (estado)
 					response.sendRedirect("noticeCompleted");
 				else
-					response.sendRedirect("error-db.html");
+					response.sendRedirect("error-accion.html");
 
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -56,7 +56,7 @@ public class CreateMatch extends HttpServlet {
 				if (idMatch > 0) {
 					response.sendRedirect("matchView?idMatch=" + idMatch);
 				} else
-					response.sendRedirect("error-db.html");
+					response.sendRedirect("error-accion.html");
 
 			} catch (SQLException e) {
 				e.printStackTrace();
