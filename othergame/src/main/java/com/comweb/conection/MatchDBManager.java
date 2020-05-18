@@ -364,13 +364,21 @@ public class MatchDBManager {
 		query2.setParameter("idMatch", idMatch);
 		List<Ads> ads2 = (List<Ads>) query2.getResultList();
 
+		Query query3 = entity.createQuery(
+				"SELECT m FROM Matches m WHERE ((m.usr1.id = :idUser AND m.statusMatchTxt.id = 1) OR (m.usr2.id = :idUser AND m.statusMatchTxt.id = 2)) AND m.id = :idMatch",
+				Matches.class);
+		query3.setParameter("idUser", idUser);
+		query3.setParameter("idMatch", idMatch);
+		List<Ads> ads3 = (List<Ads>) query3.getResultList();
+
 		if (ads1.size() > 0)
 			caso = 1;
 		else if (ads2.size() > 0) {
 			caso = 2;
-		} else {
+		} else if (ads3.size() > 0) {
 			caso = 3;
-		}
+		} else
+			caso = 4;
 		entity.getTransaction().commit();
 		return caso;
 	}

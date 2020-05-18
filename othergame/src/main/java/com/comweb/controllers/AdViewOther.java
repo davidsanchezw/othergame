@@ -69,7 +69,7 @@ public class AdViewOther extends HttpServlet {
 					RequestDispatcher rd = request.getRequestDispatcher("adView-Other.jsp");
 					rd.forward(request, response);
 				}
-				response.sendRedirect("error-anuncio.html");
+				response.sendRedirect("adView?idAd=" + idAd);
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendRedirect("error-db.html");

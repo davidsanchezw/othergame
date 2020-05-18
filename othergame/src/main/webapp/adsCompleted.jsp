@@ -40,7 +40,7 @@
 		</tr>
 	</table>
 	<div>
-		<form action="mySingleAd" method="post">
+		<form action="adViewCompleted" method="post">
 			<input type="hidden" name="idAd" value=<%=ad.getId()%> /> <input
 				type="submit" value="Ver" />
 		</form>

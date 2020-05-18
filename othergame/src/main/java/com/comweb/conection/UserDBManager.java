@@ -181,9 +181,14 @@ public class UserDBManager {
 	public Users getOtherUser(int idOtherUser) throws SQLException {
 		entity.getTransaction().begin();
 		Users tempUser = entity.find(Users.class, idOtherUser);
-		Users otherUser = new Users(tempUser.getId(), tempUser.getPublicName(), tempUser.getExplanation());
-		entity.getTransaction().commit();
-		return otherUser;
+		if (tempUser != null) {
+			Users otherUser = new Users(tempUser.getId(), tempUser.getPublicName(), tempUser.getExplanation());
+			entity.getTransaction().commit();
+			return otherUser;
+		} else {
+			entity.getTransaction().commit();
+			return null;
+		}
 	}
 
 //OK

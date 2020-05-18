@@ -41,11 +41,13 @@ public class MatchViewWait extends HttpServlet {
 
 				// Obtiene match y lo setea
 				int idMatch = Integer.parseInt(request.getParameter("idMatch"));
-				Matches match = matchDb.getMatch(idMatch);
-				request.setAttribute("match", match);
-				RequestDispatcher rd = request.getRequestDispatcher("matchView-Wait.jsp");
-				rd.forward(request, response);
-
+				if (matchDb.matchCheck(idMatch, me.getId()) == 3) {
+					Matches match = matchDb.getMatch(idMatch);
+					request.setAttribute("match", match);
+					RequestDispatcher rd = request.getRequestDispatcher("matchView-Wait.jsp");
+					rd.forward(request, response);
+				} else
+					response.sendRedirect("matchView?idMatch=" + idMatch);
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendRedirect("error-db.html");

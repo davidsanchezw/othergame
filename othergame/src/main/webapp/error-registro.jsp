@@ -7,11 +7,10 @@
 <title>OtherGame-Error Registro</title>
 </head>
 <body>
-	<h1>Error en el registro</h1>
+	<h1>OtherGame</h1>
+	<h2>Error en el registro</h2>
 	<%
-		int errorTxt = (int) request.getAttribute("errorTxt");
-	%>
-	<%
+		int errorTxt = (int) request.getAttribute("errorTxt");	
 		if (errorTxt == 1) {
 	%>
 	<p>Email existente</p>

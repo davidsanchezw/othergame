@@ -45,18 +45,21 @@ public class MatchViewOtherAdsOffered extends HttpServlet {
 				MatchDBManager matchDb = new MatchDBManager(db);
 				AdDBManager adDb = new AdDBManager(db);
 
-				// Obtiene match actual y lo setea
 				int idMatch = Integer.parseInt(request.getParameter("idMatch"));
-				Matches currentMatch = matchDb.getMatch(idMatch);
-				request.setAttribute("currentMatch", currentMatch);
 
-				// Obtiene ads del otro y los setea
-				List<Ads> otherAds = adDb.getOtherUserAdsByMatch(idMatch);
-				request.setAttribute("otherAds", otherAds);
+				if (matchDb.matchCheck(idMatch, me.getId()) == 1) {
+					// Obtiene match actual y lo setea
+					Matches currentMatch = matchDb.getMatch(idMatch);
+					request.setAttribute("currentMatch", currentMatch);
 
-				RequestDispatcher rd = request.getRequestDispatcher("matchView-OtherAdsOffered.jsp");
-				rd.forward(request, response);
+					// Obtiene ads del otro y los setea
+					List<Ads> otherAds = adDb.getOtherUserAdsByMatch(idMatch);
+					request.setAttribute("otherAds", otherAds);
 
+					RequestDispatcher rd = request.getRequestDispatcher("matchView-OtherAdsOffered.jsp");
+					rd.forward(request, response);
+				} else
+					response.sendRedirect("matchView?idMatch=" + idMatch);
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendRedirect("error-db.html");

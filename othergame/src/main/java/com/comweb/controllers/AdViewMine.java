@@ -63,7 +63,7 @@ public class AdViewMine extends HttpServlet {
 					RequestDispatcher rd = request.getRequestDispatcher("adView-Mine.jsp");
 					rd.forward(request, response);
 				}
-				response.sendRedirect("error-anuncio.html");
+				response.sendRedirect("adView?idAd=" + idAd);
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendRedirect("error-db.html");
