@@ -3,7 +3,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>OtherGame-Login</title>
-<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="styleform.css">
 </head>
 <body>
 

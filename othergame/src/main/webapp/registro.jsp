@@ -5,7 +5,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>OtherGame-Registro</title>
-<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="styleform.css">
 </head>
 <body>
 	<form autocomplete='off' class='form' method="post" action="createUser">
