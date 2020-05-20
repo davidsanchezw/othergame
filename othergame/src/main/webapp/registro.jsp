@@ -17,8 +17,7 @@
 			<input type="email" name="uemail"
 				pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,64}$"
 				title="caracteres@caracteres.dominio , y como mucho de 64 caracteres"
-				placeholder='Email' size="20" required>
-			</td>
+				placeholder='Email' size="20" required>			
 			<div class='bg-top'>
 				<div class='bg-inner'></div>
 			</div>
@@ -45,7 +44,7 @@
 		</div>
 		<div class='control block-cube block-input'>
 			<input type="password" name="psw"
-				pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}"
+				pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,20}"
 				title="Debe contener al menos un numero, una minúscula y una mayúcula, y como minimo 8 caracteres, y como mucho 20"
 				placeholder='Contraseña' size="20" required>
 			<div class='bg-top'>

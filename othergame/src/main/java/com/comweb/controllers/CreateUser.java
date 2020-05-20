@@ -99,7 +99,8 @@ public class CreateUser extends HttpServlet {
 			response.sendRedirect("error-pass.html");
 		}
 
-		Users user = new Users(uemail, saltTxt, hashTxt, usr, desc);
+		Users user = new Users(uemail, saltTxt, hashTxt, usr.replaceAll("[^\\w\\s]", ""),
+				desc.replaceAll("[^\\w\\s]", ""));
 
 		// Buscar en base de datos al usuario con dicho email y nickname
 		try (DBManager db = new DBManager()) {

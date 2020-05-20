@@ -26,9 +26,9 @@ public class AdDBManager {
 	 * Insert in BD a new ad.
 	 *
 	 * @param ad The ad created.
-	 * @return The number of id, or 0 if ....
+	 * @return The number of id
+	 * @throws SQLException
 	 */
-
 	public int createAd(Ads ad) throws SQLException {
 		entity.getTransaction().begin();
 		entity.persist(ad);
@@ -36,23 +36,26 @@ public class AdDBManager {
 		return ad.getId();
 	}
 
-	// TO DO:
-	// https://www.youtube.com/watch?v=L6mGNM_zyaQ&list=PLTd5ehIj0goPcnQs34i0F-Kgp5JHX8UUv&index=7
-
 	/**
-	 * Get an ad from BD.
+	 * Obtiene anuncio por su id, usado con post.
 	 *
 	 * @param id The id of the ad.
 	 * @return The Ad object, or null if not found.
-	 * @throws SQLException If somthing fails with the DB.
+	 * @throws SQLException If something fails with the DB.
 	 */
-
 	public Ads getAd(int id) throws SQLException {
 
 		return entity.find(Ads.class, id);
 	}
 
-//ok
+	/**
+	 * Obtiene anuncio mio por su id, comprueba que es mio.
+	 *
+	 * @param idAd   The id of the ad.
+	 * @param idUser The id of the user mine.
+	 * @return The Ad object, or null if not found.
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public Ads getMyAd(int idAd, int idUser) throws SQLException {
 		entity.getTransaction().begin();
 
@@ -70,7 +73,14 @@ public class AdDBManager {
 			return null;
 	}
 
-//ok
+	/**
+	 * Obtiene anuncio de otro por su id, comprueba que no es mio.
+	 *
+	 * @param idAd   The id of the ad.
+	 * @param idUser The id of the user mine.
+	 * @return The Ad object, or null if not found.
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public Ads getOtherAd(int idAd, int idUser) throws SQLException {
 		entity.getTransaction().begin();
 
@@ -89,7 +99,14 @@ public class AdDBManager {
 			return null;
 	}
 
-//OK
+	/**
+	 * Obtiene lista de anuncios ultimos disponibles.
+	 *
+	 * @param size The size of the page.
+	 * @param page The page.
+	 * @return The list of Ads object.
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public List<Ads> getLastAds(int size, int page) throws SQLException {
 		entity.getTransaction().begin();
 		Query query = entity.createQuery("SELECT a FROM Ads a WHERE a.statusPostTxt.id = 1 ORDER BY a.id DESC",
@@ -99,20 +116,33 @@ public class AdDBManager {
 		List<Ads> ads = (List<Ads>) query.getResultList();
 		entity.getTransaction().commit();
 		return ads;
-
 	}
 
-//OK
+	/**
+	 * Obtiene StatusItemTxt por su id.
+	 *
+	 * @param id The id of the StatusItemTxt.
+	 * @return The StatusItemTxt object.
+	 */
 	public StatusItemTxt getstatusItemTxt(int id) {
 		return entity.find(StatusItemTxt.class, id);
 	}
 
-//OK
+	/**
+	 * Obtiene StatusPostTxt por su id.
+	 *
+	 * @param id The id of the StatusPostTxt.
+	 * @return The StatusPostTxt object.
+	 */
 	public StatusPostTxt getstatusPostTxt(int id) {
 		return entity.find(StatusPostTxt.class, id);
 	}
 
-//OK
+	/**
+	 * Obtiene el numero de anuncios existentes disponibles.
+	 * 
+	 * @return The quantity of Ads.
+	 */
 	public int getQuantity() {
 		entity.getTransaction().begin();
 		Query query = entity.createQuery("SELECT a FROM Ads a WHERE a.statusPostTxt.id = 1", Ads.class);
@@ -122,30 +152,13 @@ public class AdDBManager {
 	}
 
 	/**
-	 * Search user by Id.
+	 * Get list of ads by its id, with the status wished.
 	 *
-	 * @param id The id of the user.
+	 * @param idUser           The id of the user.
+	 * @param statusPostNumber The statusPostNumber of the statusPost.
 	 * @return The User object, or null if not found.
-	 * @throws SQLException If somthing fails with the DB.
+	 * @throws SQLException If something fails with the DB.
 	 */
-	public Users getUserAd(int id) throws SQLException {
-		entity.getTransaction().begin();
-		Ads ad = entity.find(Ads.class, id);
-		Users user = ad.getUser();
-		user.getId();
-		entity.getTransaction().commit();
-		return user;
-
-	}
-
-	/**
-	 * Search user by Id.
-	 *
-	 * @param id The id of the user.
-	 * @return The User object, or null if not found.
-	 * @throws SQLException If somthing fails with the DB.
-	 */
-//OK
 	public List<Ads> getUserAds(int idUser, int statusPostNumber) throws SQLException {
 		entity.getTransaction().begin();
 		Query query = entity.createQuery(
@@ -158,10 +171,18 @@ public class AdDBManager {
 
 	}
 
-//OK 
+	/**
+	 * Get list of ads by its id, with the status wished.
+	 *
+	 * @param idUser           The id of the user.
+	 * @param statusPostNumber The statusPostNumber of the statusPost.
+	 * @return The User object, or null if not found.
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public List<Ads> getResultSearch(String search, int size, int page) {
 		entity.getTransaction().begin();
-		Query query = entity.createQuery("FROM Ads a WHERE a.nameAd like :search AND a.statusPostTxt.id = 1",
+		Query query = entity.createQuery(
+				"FROM Ads a WHERE (a.nameAd like :search OR a.explanation like :search) AND a.statusPostTxt.id = 1",
 				Ads.class);
 		query.setParameter("search", "%" + search + "%");
 		query.setMaxResults(size);
@@ -172,7 +193,12 @@ public class AdDBManager {
 
 	}
 
-//OK
+	/**
+	 * Obtiene el numero de anuncios existentes disponibles para al busqueda.
+	 * 
+	 * @param search The search txt.
+	 * @return The quantity of Ads.
+	 */
 	public int getQuantitySearched(String search) {
 		entity.getTransaction().begin();
 		Query query = entity.createQuery("FROM Ads a WHERE a.nameAd like :search AND a.statusPostTxt.id = 1",
@@ -184,7 +210,13 @@ public class AdDBManager {
 		return quantitySearched;
 	}
 
-//OK
+	/**
+	 * Retira un anuncio.
+	 *
+	 * @param idAdToRetired The id of the ad to be retired.
+	 * @return boolean if ok.
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public boolean adToRetired(int idAdToRetired) {
 		boolean ok = false;
 		entity.getTransaction().begin();
@@ -220,14 +252,20 @@ public class AdDBManager {
 		return ok;
 	}
 
-//OK
-	public boolean adToRestored(int idAdToRestoredd) {
+	/**
+	 * Restaura un anuncio.
+	 *
+	 * @param idAdToRestored The id of the ad to be restored.
+	 * @return boolean if ok.
+	 * @throws SQLException If something fails with the DB.
+	 */
+	public boolean adToRestored(int idAdToRestored) {
 		boolean ok = false;
 		entity.getTransaction().begin();
 		// Modifica el ad a retirado
 		Query query1 = entity
 				.createQuery("SELECT a FROM Ads a WHERE a.id = :idAdToRestoredd AND a.statusPostTxt.id = 2", Ads.class);
-		query1.setParameter("idAdToRestoredd", idAdToRestoredd);
+		query1.setParameter("idAdToRestoredd", idAdToRestored);
 		List<Ads> ads = (List<Ads>) query1.getResultList();
 		if (ads.size() > 0) {
 			Ads adToRetired = ads.get(0);
@@ -239,27 +277,49 @@ public class AdDBManager {
 		return ok;
 	}
 
-//OK
+	/**
+	 * Chekea el caso de un anuncio para mostrar su vista correspondiente.
+	 *
+	 * @param idAd   The id of the ad.
+	 * @param idUser The id of my user
+	 * @return int with the case.
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public int adCheck(int idAd, int idUser) {
 		int caso = 0;
 		entity.getTransaction().begin();
 		Users me = entity.find(Users.class, idUser);
 		// Caso anuncio mio
-		Query query = entity.createQuery("SELECT a FROM Ads a WHERE a.user.id = :idUser AND a.id = :idAd", Ads.class);
-		query.setParameter("idUser", idUser);
-		query.setParameter("idAd", idAd);
+		Query query1 = entity.createQuery(
+				"SELECT a FROM Ads a WHERE a.user.id = :idUser AND a.id = :idAd AND a.statusPostTxt.id = 1", Ads.class);
+		query1.setParameter("idUser", idUser);
+		query1.setParameter("idAd", idAd);
+		List<Ads> ads1 = (List<Ads>) query1.getResultList();
 
-		List<Ads> ads = (List<Ads>) query.getResultList();
-		if (ads.size() > 0)
+		// Caso anuncio otro
+		Query query2 = entity.createQuery(
+				"SELECT a FROM Ads a WHERE a.user.id != :idUser AND a.id = :idAd AND a.statusPostTxt.id = 1",
+				Ads.class);
+		query2.setParameter("idUser", idUser);
+		query2.setParameter("idAd", idAd);
+		List<Ads> ads2 = (List<Ads>) query2.getResultList();
+
+		if (ads1.size() > 0)
 			caso = 1;
-		else {
+		else if (ads2.size() > 0) {
 			caso = 2;
 		}
 		entity.getTransaction().commit();
 		return caso;
 	}
 
-//OK
+	/**
+	 * Obtiene la lista de anuncios que ofrece el otro usuario en un match.
+	 *
+	 * @param idMatch The id of the match.
+	 * @return list of ads.
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public List<Ads> getOtherUserAdsByMatch(int idMatch) throws SQLException {
 		entity.getTransaction().begin();
 		int idUser = entity.find(Matches.class, idMatch).getUsr1().getId();

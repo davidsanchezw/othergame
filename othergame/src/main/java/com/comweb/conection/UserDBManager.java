@@ -11,7 +11,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import com.comweb.model.Ads;
-import com.comweb.model.Matches;
 import com.comweb.model.Users;
 
 public class UserDBManager {
@@ -28,10 +27,10 @@ public class UserDBManager {
 	 * @param email The email from user to check.
 	 * @return The number of id, or 0 if the email and pass does not match.
 	 *         PBKDF2WithHmacSHA1
+	 * @throws SQLException
 	 * @throws InvalidKeySpecException
 	 * @throws NoSuchAlgorithmException
 	 */
-//OK
 	public Users checkLogin(String email, String pass)
 			throws SQLException, NoSuchAlgorithmException, InvalidKeySpecException {
 		entity.getTransaction().begin();
@@ -85,9 +84,9 @@ public class UserDBManager {
 	 * Insert in BD a new user.
 	 *
 	 * @param ad The user created.
-	 * @return The number of id, or 0 if ....
+	 * @return The number of id
+	 * @throws SQLException
 	 */
-//OK
 	public int createUser(Users user) throws SQLException {
 		entity.getTransaction().begin();
 		entity.persist(user);
@@ -100,11 +99,14 @@ public class UserDBManager {
 	 *
 	 * @param email The email to check.
 	 * @return True if is available, or false if not
+	 * @throws SQLException
 	 */
 	public boolean emailAvalaible(String email) throws SQLException {
+		entity.getTransaction().begin();
 		Query query = entity.createQuery("SELECT u FROM Users u WHERE u.email = :email", Users.class);
 		query.setParameter("email", email);
 		List<Users> results = query.getResultList();
+		entity.getTransaction().commit();
 		if (results.isEmpty())
 			return true;
 		else
@@ -112,15 +114,18 @@ public class UserDBManager {
 	}
 
 	/**
-	 * Check in BD if an email exists.
+	 * Check in BD if a nickName exists.
 	 *
-	 * @param email The email to check.
+	 * @param nickName The nickName to check.
 	 * @return True if is available, or false if not
+	 * @throws SQLException
 	 */
 	public boolean nicknameAvalaible(String nickName) throws SQLException {
+		entity.getTransaction().begin();
 		Query query = entity.createQuery("SELECT u FROM Users u WHERE u.publicName = :nickName", Users.class);
 		query.setParameter("nickName", nickName);
 		List<Users> results = query.getResultList();
+		entity.getTransaction().commit();
 		if (results.isEmpty())
 			return true;
 		else
@@ -128,11 +133,11 @@ public class UserDBManager {
 	}
 
 	/**
-	 * Search user by Id.
+	 * Get my user by Id.
 	 *
 	 * @param id The id of the user.
 	 * @return The User object, or null if not found.
-	 * @throws SQLException If somthing fails with the DB.
+	 * @throws SQLException If something fails with the DB.
 	 */
 	public Users getUser(int id) throws SQLException {
 
@@ -140,44 +145,12 @@ public class UserDBManager {
 	}
 
 	/**
-	 * Search user by Id.
+	 * Get other user by Id.
 	 *
 	 * @param id The id of the user.
 	 * @return The User object, or null if not found.
-	 * @throws SQLException If somthing fails with the DB.
+	 * @throws SQLException If something fails with the DB.
 	 */
-//	public List<Ads> getAdsUser(int id) throws SQLException {
-//		entity.getTransaction().begin();
-//		Users user = entity.find(Users.class, id);
-//		List<Ads> ads = user.getAds();
-//		ads.size();
-//		entity.getTransaction().commit();
-//		return ads;
-//
-//	}
-
-	public List<Matches> getMatchesFirstUser(int id) throws SQLException {
-		entity.getTransaction().begin();
-		Users user = entity.find(Users.class, id);
-		List<Matches> matches = user.getMatchesFirst();
-		matches.size();
-		entity.getTransaction().commit();
-		return matches;
-
-	}
-
-//	public Users getOtherUser(int idOtherUser) throws SQLException {
-//		entity.getTransaction().begin();
-//		Query query = entity
-//				.createNativeQuery("SELECT u.id u.publicName u.explanation FROM Users u WHERE u.id = :idOtherUser");
-//		query.setParameter("idOtherUser", idOtherUser);
-//
-//		Users otherUser = (Users) query.getSingleResult();
-//
-//		entity.getTransaction().commit();
-//		return otherUser;
-//	}
-
 	public Users getOtherUser(int idOtherUser) throws SQLException {
 		entity.getTransaction().begin();
 		Users tempUser = entity.find(Users.class, idOtherUser);
@@ -191,13 +164,36 @@ public class UserDBManager {
 		}
 	}
 
-//OK
+	/**
+	 * Get simple user by Id ad.
+	 *
+	 * @param idAd The id of the ad.
+	 * @return The User object, or null if not found.
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public Users getSimpleUserByAd(int idAd) throws SQLException {
 		entity.getTransaction().begin();
 		Ads ad = entity.find(Ads.class, idAd);
 		Users simpleUser = new Users(ad.getUser().getId(), ad.getUser().getPublicName(), ad.getUser().getExplanation());
 		entity.getTransaction().commit();
 		return simpleUser;
+	}
+
+	/**
+	 * Search user by Id.
+	 *
+	 * @param id The id of the user.
+	 * @return The User object.
+	 * @throws SQLException If something fails with the DB.
+	 */
+	public Users getUserAd(int id) throws SQLException {
+		entity.getTransaction().begin();
+		Ads ad = entity.find(Ads.class, id);
+		Users user = ad.getUser();
+		user.getId();
+		entity.getTransaction().commit();
+		return user;
+
 	}
 
 }

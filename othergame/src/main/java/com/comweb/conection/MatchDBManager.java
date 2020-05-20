@@ -34,6 +34,9 @@ public class MatchDBManager {
 		Query query = entity.createQuery("SELECT a FROM Ads a WHERE a.id = :ad1 AND a.statusPostTxt.id = 1", Ads.class);
 		query.setParameter("ad1", match.getAd1().getId());
 		List<Ads> ads = (List<Ads>) query.getResultList();
+
+		// Si cumple que el anuncio esta disponible crea el match y devuelve el id, si
+		// no 0
 		if (ads.size() > 0) {
 			entity.persist(match);
 			id = match.getId();
@@ -58,51 +61,56 @@ public class MatchDBManager {
 	 * Devuelve el objeto StatusMatchTxt.
 	 *
 	 * @param id The id of the StatusMatchTxt.
-	 * @return A StatusMatchTxt.
-	 * @throws SQLException If somthing fails with the DB.
+	 * @return A StatusMatchTxt object.
+	 * @throws SQLException If something fails with the DB.
 	 */
 	public StatusMatchTxt getstatusMatchTxt(int id) {
 		return entity.find(StatusMatchTxt.class, id);
 	}
 
 	/**
-	 * Devuelve la lista de los matches en proceso: los que he iniciado y los que
+	 * Devuelve la lista de los matches en proceso: los que he iniciado o los que
 	 * debo confirmacion.
 	 *
 	 * @param usr1              The id of the user.
 	 * @param statusMatchNumber The id of the statusMatch.
 	 * @return A list of Matches.
-	 * @throws SQLException If somthing fails with the DB.
+	 * @throws SQLException If something fails with the DB.
 	 */
 	public List<Matches> getFirstMatch(int usr1, int statusMatchNumber) throws SQLException { // A
 		entity.getTransaction().begin();
+
 		Query query = entity.createQuery(
 				"SELECT m FROM Matches m WHERE m.usr1.id = :usr1 AND m.statusMatchTxt.id = :statusMatchNumber",
 				Matches.class);
 		query.setParameter("usr1", usr1);
 		query.setParameter("statusMatchNumber", statusMatchNumber);
 		List<Matches> matches = (List<Matches>) query.getResultList();
+
 		entity.getTransaction().commit();
+
 		return matches;
 	}
 
 	/**
-	 * Devuelve la lista de los matches en proceso: los que debo buscar otro anuncio
-	 * y los que espero a confirmacion.
+	 * Devuelve la lista de los matches en proceso: los que debo elegir otro anuncio
+	 * o los que espero a confirmacion.
 	 *
 	 * @param usr2              The id of the user.
 	 * @param statusMatchNumber The id of the statusMatch.
 	 * @return A list of Matches.
-	 * @throws SQLException If somthing fails with the DB.
+	 * @throws SQLException If something fails with the DB.
 	 */
 	public List<Matches> getSecondMatch(int usr2, int statusMatchNumber) throws SQLException {
 		entity.getTransaction().begin();
+
 		Query query = entity.createQuery(
 				"SELECT m FROM Matches m WHERE m.usr2.id = :usr2 AND m.statusMatchTxt.id = :statusMatchNumber",
 				Matches.class);
 		query.setParameter("usr2", usr2);
 		query.setParameter("statusMatchNumber", statusMatchNumber);
 		List<Matches> matches = (List<Matches>) query.getResultList();
+
 		entity.getTransaction().commit();
 		return matches;
 	}
@@ -114,7 +122,7 @@ public class MatchDBManager {
 	 * @param usr               The id of the user.
 	 * @param statusMatchNumber The id of the statusMatch.
 	 * @return A list of Matches.
-	 * @throws SQLException If somthing fails with the DB.
+	 * @throws SQLException If something fails with the DB.
 	 */
 	public List<Matches> getEndedMatch(int usr, int statusMatchNumber) throws SQLException {
 		entity.getTransaction().begin();
@@ -136,7 +144,7 @@ public class MatchDBManager {
 	 *
 	 * @param idMatchToCompleted The id of the match.
 	 * @return A boolean if the process is done right.
-	 * @throws SQLException If somthing fails with the DB.
+	 * @throws SQLException If something fails with the DB.
 	 */
 	public boolean matchToConfirm(int idMatchToCompleted) throws SQLException {
 		boolean ok = false;
@@ -185,7 +193,7 @@ public class MatchDBManager {
 	 *
 	 * @param idMatchToCancelled The id of the match.
 	 * @return A boolean if the process is done right.
-	 * @throws SQLException If somthing fails with the DB.
+	 * @throws SQLException If something fails with the DB.
 	 */
 	public boolean matchToCancelled(int idMatchToCancelled) throws SQLException {
 		boolean ok = false;
@@ -213,9 +221,10 @@ public class MatchDBManager {
 	/**
 	 * Convierte una propuesta en proceso a cancelado.
 	 *
-	 * @param idMatchToCancelled The id of the match.
+	 * @param idMatchToPending The id of the match.
+	 * @param idAdToPending    The id of the ad.
 	 * @return A boolean if the process is done right.
-	 * @throws SQLException If somthing fails with the DB.
+	 * @throws SQLException If something fails with the DB.
 	 */
 	public boolean matchToPending(int idMatchToPending, int idAdToPending) throws SQLException {
 		boolean ok = false;
@@ -248,7 +257,13 @@ public class MatchDBManager {
 		return ok;
 	}
 
-//OK
+	/**
+	 * Obtiene los matches en que un anuncio propio participe de fase 1.
+	 *
+	 * @param idAd The id of the ad.
+	 * @return A list of Matches
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public List<Matches> getMatchesRelationatedOne(int idAd) throws SQLException {
 		entity.getTransaction().begin();
 
@@ -261,7 +276,14 @@ public class MatchDBManager {
 		return matches;
 	}
 
-	// OK
+	/**
+	 * Obtiene los matches en que un anuncio propio participe de fase 2 y deba de
+	 * responder yo.
+	 *
+	 * @param idAd The id of the ad.
+	 * @return A list of Matches
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public List<Matches> getMatchesRelationatedTwoMe(int idAd) throws SQLException {
 		entity.getTransaction().begin();
 
@@ -274,7 +296,14 @@ public class MatchDBManager {
 		return matches;
 	}
 
-	// OK
+	/**
+	 * Obtiene los matches en que un anuncio propio participe de fase 2 y deba de
+	 * responder el otro user.
+	 *
+	 * @param idAd The id of the ad.
+	 * @return A list of Matches
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public List<Matches> getMatchesRelationatedTwoOther(int idAd) throws SQLException {
 		entity.getTransaction().begin();
 
@@ -287,7 +316,14 @@ public class MatchDBManager {
 		return matches;
 	}
 
-//OK
+	/**
+	 * Obtiene el match en que un anuncio ajeno participe de fase 1.
+	 *
+	 * @param idAd   The id of the ad.
+	 * @param idUser The id of the idUser.
+	 * @return A Match
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public Matches getMatchRelationatedOne(int idAd, int idUser) throws SQLException {
 		entity.getTransaction().begin();
 
@@ -305,7 +341,15 @@ public class MatchDBManager {
 			return null;
 	}
 
-	// OK
+	/**
+	 * Obtiene el match en que un anuncio ajeno participe de fase 2 pendientes de mi
+	 * responder.
+	 *
+	 * @param idAd   The id of the ad.
+	 * @param idUser The id of the idUser.
+	 * @return A Match
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public Matches getMatchRelationatedTwoMe(int idAd, int idUser) throws SQLException {
 		entity.getTransaction().begin();
 
@@ -323,7 +367,15 @@ public class MatchDBManager {
 			return null;
 	}
 
-	// OK
+	/**
+	 * Obtiene el match en que un anuncio ajeno participe de fase 2 pendiente de
+	 * responder el otro usuario.
+	 *
+	 * @param idAd   The id of the ad.
+	 * @param idUser The id of the idUser.
+	 * @return A Match
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public Matches getMatchRelationatedTwoOther(int idAd, int idUser) throws SQLException {
 		entity.getTransaction().begin();
 
@@ -341,7 +393,14 @@ public class MatchDBManager {
 			return null;
 	}
 
-	// OK
+	/**
+	 * Chekea el caso de un match para saber donde redireccionar.
+	 *
+	 * @param idMatch The id of the match.
+	 * @param idUser  The id of the idUser.
+	 * @return A Match
+	 * @throws SQLException If something fails with the DB.
+	 */
 	public int matchCheck(int idMatch, int idUser) {
 		int caso = 0;
 		entity.getTransaction().begin();
@@ -364,6 +423,7 @@ public class MatchDBManager {
 		query2.setParameter("idMatch", idMatch);
 		List<Ads> ads2 = (List<Ads>) query2.getResultList();
 
+		// Participo pero espero
 		Query query3 = entity.createQuery(
 				"SELECT m FROM Matches m WHERE ((m.usr1.id = :idUser AND m.statusMatchTxt.id = 1) OR (m.usr2.id = :idUser AND m.statusMatchTxt.id = 2)) AND m.id = :idMatch",
 				Matches.class);

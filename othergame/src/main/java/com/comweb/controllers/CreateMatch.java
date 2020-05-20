@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import com.comweb.conection.AdDBManager;
 import com.comweb.conection.DBManager;
 import com.comweb.conection.MatchDBManager;
+import com.comweb.conection.UserDBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.Matches;
 import com.comweb.model.StatusMatchTxt;
@@ -38,11 +39,12 @@ public class CreateMatch extends HttpServlet {
 
 			try (DBManager db = new DBManager()) {
 				AdDBManager adDb = new AdDBManager(db);
+				UserDBManager userDb = new UserDBManager(db);
 				MatchDBManager matchDb = new MatchDBManager(db);
 
 				// Ontengo caracteristicas
 				int idAd = Integer.parseInt(request.getParameter("idAd"));
-				Users usr2 = adDb.getUserAd(idAd);
+				Users usr2 = userDb.getUserAd(idAd);
 				Ads ad1 = adDb.getAd(idAd);
 				int statusMatchNumber = 1;
 				StatusMatchTxt statusMatchTxt = matchDb.getstatusMatchTxt(statusMatchNumber);

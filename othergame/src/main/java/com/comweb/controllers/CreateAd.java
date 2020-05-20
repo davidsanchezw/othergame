@@ -44,7 +44,8 @@ public class CreateAd extends HttpServlet {
 				StatusPostTxt statusPostTxt = adDb.getstatusPostTxt(statusPostNumber);
 				Date date = new Date();
 
-				Ads ad = new Ads(nameAd, explanation, date, null, statusItemTxt, statusPostTxt, me);
+				Ads ad = new Ads(nameAd.replaceAll("[^\\w\\s]", ""), explanation.replaceAll("[^\\w\\s]", ""), date,
+						null, statusItemTxt, statusPostTxt, me);
 
 				// Buscar en base de datos al usuario con dicho email y contraseña
 
