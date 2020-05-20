@@ -11,7 +11,6 @@ import com.comweb.model.Ads;
 import com.comweb.model.Matches;
 import com.comweb.model.StatusMatchTxt;
 import com.comweb.model.StatusPostTxt;
-import com.comweb.model.Users;
 
 public class MatchDBManager {
 
@@ -404,10 +403,9 @@ public class MatchDBManager {
 	public int matchCheck(int idMatch, int idUser) {
 		int caso = 0;
 		entity.getTransaction().begin();
-		Users me = entity.find(Users.class, idUser);
+
 		// Estado propuesta y el usuario actual es el propietario del anuncio por el que
 		// se creó
-
 		Query query = entity.createQuery(
 				"SELECT m FROM Matches m WHERE m.usr2.id = :idUser AND m.id = :idMatch AND m.statusMatchTxt.id = 1",
 				Matches.class);
@@ -441,6 +439,31 @@ public class MatchDBManager {
 			caso = 4;
 		entity.getTransaction().commit();
 		return caso;
+	}
+
+	public int quantity1(int idUser) {
+		entity.getTransaction().begin();
+
+		// Estado propuesta y el usuario actual es el propietario del anuncio por el que
+		// se creó
+		Query query = entity.createQuery(
+				"SELECT m FROM Matches m WHERE m.usr2.id = :idUser AND m.statusMatchTxt.id = 1", Matches.class);
+		query.setParameter("idUser", idUser);
+		List<Ads> ads1 = (List<Ads>) query.getResultList();
+		entity.getTransaction().commit();
+		return ads1.size();
+	}
+
+	public int quantity2(int idUser) {
+		entity.getTransaction().begin();
+
+		// Estado aceptado, y el usuario actual es quien ha iniciado la oferta
+		Query query2 = entity.createQuery(
+				"SELECT m FROM Matches m WHERE m.usr1.id = :idUser AND m.statusMatchTxt.id = 2", Matches.class);
+		query2.setParameter("idUser", idUser);
+		List<Ads> ads2 = (List<Ads>) query2.getResultList();
+		entity.getTransaction().commit();
+		return ads2.size();
 	}
 
 }

@@ -58,8 +58,8 @@
 			</div>
 		</div>
 		<div class='control block-cube block-input'>
-			<input type="text" name="desc" pattern="[A-Za-z0-9]{10,255}"
-				title="Se validan letras y números, escriba al menos 10 caracteres , y como mucho 255"
+			<input type="text" name="desc" pattern="[A-Za-z0-9]{10,64}"
+				title="Se validan letras y números, escriba al menos 10 caracteres , y como mucho 64"
 				placeholder='Descripción' size="30" required>
 			<div class='bg-top'>
 				<div class='bg-inner'></div>

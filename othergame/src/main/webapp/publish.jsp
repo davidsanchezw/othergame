@@ -24,15 +24,15 @@
 			<table>
 				<tr>
 					<td>Nombre:</td>
-					<td><input type="text" name="name" pattern="[A-Za-z0-9]{3,32}"
+					<td><input type="text" name="name" pattern="[A-Za-z0-9\s.,¡!¿?]{3,32}"
 						title="Se validan letras y números, escriba al menos 3 caracteres, y como mucho 32"
 						size="20" required></td>
 				</tr>
 				<tr>
 					<td>Descripcion:</td>
 					<td><input type="text" name="desc"
-						pattern="[A-Za-z0-9]{10,255}"
-						title="Se validan letras y números, escriba al menos 10 caracteres, y como mucho 255"
+						pattern="[A-Za-z0-9\s.,¡!¿?]{10,80}"
+						title="Se validan letras y números, escriba al menos 10 caracteres, y como mucho 80"
 						size="30" required></td>
 
 				</tr>

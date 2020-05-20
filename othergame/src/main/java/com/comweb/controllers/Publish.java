@@ -8,6 +8,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.comweb.model.Users;
 
 /**
  * Servlet que recoge los datos del .html y si es correcto manda a principal si
@@ -23,9 +26,15 @@ public class Publish extends HttpServlet {
 	 */
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
-		RequestDispatcher rd = request.getRequestDispatcher("publish.jsp");
-		rd.forward(request, response);
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
+		HttpSession session = request.getSession();
+		Users me = (Users) session.getAttribute("me");
+		if (me == null) {
+			response.sendRedirect("index.jsp");
+		} else {
+			RequestDispatcher rd = request.getRequestDispatcher("publish.jsp");
+			rd.forward(request, response);
+		}
 	}
 
 }

@@ -63,17 +63,25 @@ form {
 .cuerpo input {
 	margin-left: 2em;
 	margin-bottom: 2px;
-	font-size: 10px;
+	font-size: 13px;
 	font-family: Verdana, Helvetica;
 	font-weight: bold;
 	color: white;
 	background: #489E0D;
 	border: 0px;
 	width: auto;
-	height: 19px;
+	height: auto;
 	border-radius: 6px;
 	border: 2px solid #000000;
 }
 .linea {
 	margin-bottom: 3em;
 }
+select {
+     background: #489E0D;
+     border: none;
+     font-size: 14px;
+     height: 30px;
+     padding: 5px;
+     width: auto;
+  }

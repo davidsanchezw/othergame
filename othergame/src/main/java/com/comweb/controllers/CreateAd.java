@@ -18,24 +18,29 @@ import com.comweb.model.StatusItemTxt;
 import com.comweb.model.StatusPostTxt;
 import com.comweb.model.Users;
 
+/**
+ * Servlet que recoge los datos para crear un nuevo anuncio
+ *
+ */
 @WebServlet("/createAd")
 public class CreateAd extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
+		// Obtiene el usuario desde la sesion. Redirecciona a index si no se encuentra.
 		HttpSession session = request.getSession();
-
 		Users me = (Users) session.getAttribute("me");
 		if (me == null) {
 			response.sendRedirect("index.jsp");
 		} else {
 			try (DBManager db = new DBManager()) {
 				AdDBManager adDb = new AdDBManager(db);
-				// obtiene los parametros para autenticar
+
+				// obtiene los parametros para crear el nuevo anuncio
 				String nameAd = request.getParameter("name");
 				String explanation = request.getParameter("desc");
 				int statusItemNumber = Integer.parseInt(request.getParameter("status"));
@@ -44,10 +49,10 @@ public class CreateAd extends HttpServlet {
 				StatusPostTxt statusPostTxt = adDb.getstatusPostTxt(statusPostNumber);
 				Date date = new Date();
 
-				Ads ad = new Ads(nameAd.replaceAll("[^\\w\\s]", ""), explanation.replaceAll("[^\\w\\s]", ""), date,
-						null, statusItemTxt, statusPostTxt, me);
+				Ads ad = new Ads(nameAd.replaceAll("[^\\w\\s,.¿?¡!]", ""),
+						explanation.replaceAll("[^\\w\\s,.¿?¡!]", ""), date, null, statusItemTxt, statusPostTxt, me);
 
-				// Buscar en base de datos al usuario con dicho email y contraseña
+				// Crea el anuncio y lleva a la vista del nuevo anuncio
 
 				int idAd = adDb.createAd(ad);
 				response.sendRedirect("adView?idAd=" + idAd);

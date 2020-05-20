@@ -19,10 +19,17 @@
 	</div>
 	<div class='cuerpo'>
 		<h2>Principal</h2>
-
+		
 		<%
 			Users me = (Users) session.getAttribute("me");
+			int quantity1 = (int)request.getAttribute("quantity1");
+			int quantity2 = (int)request.getAttribute("quantity2");
+			if(quantity1 + quantity2 > 0){
 		%>
+		<h3>Tareas: <%=quantity1 + quantity2 %> (Dirígete a mi perfil)</h3>
+		
+		<%} %>
+		
 		<p>
 			¿Qué estás buscando hoy,
 			<%=me.getPublicName()%>?

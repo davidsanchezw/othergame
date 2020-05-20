@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import com.comweb.conection.AdDBManager;
 import com.comweb.conection.DBManager;
+import com.comweb.conection.MatchDBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.Users;
 
@@ -41,6 +42,7 @@ public class Principal extends HttpServlet {
 			// Buscar en base de datos los 10 anuncios mas nuevos
 			try (DBManager db = new DBManager()) {
 				AdDBManager adDb = new AdDBManager(db);
+				MatchDBManager matchDb = new MatchDBManager(db);
 				int size = 10;
 				int page = 0;
 				List<Ads> principalAds = (List<Ads>) adDb.getLastAds(size, page);
@@ -49,6 +51,13 @@ public class Principal extends HttpServlet {
 				request.setAttribute("principalAds", principalAds);
 				request.setAttribute("page", page);
 				request.setAttribute("quantity", adDb.getQuantity());
+
+				// Cantidad de tareas
+				int quantity1 = matchDb.quantity1(me.getId());
+				request.setAttribute("quantity1", quantity1);
+
+				int quantity2 = matchDb.quantity2(me.getId());
+				request.setAttribute("quantity2", quantity2);
 
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -26,6 +26,8 @@
 			finalizadas, y tus anuncios</p>
 		<%
 			Users me = (Users) session.getAttribute("me");
+			int quantity1 = (int)request.getAttribute("quantity1");
+			int quantity2 = (int)request.getAttribute("quantity2");
 		%>
 		<h3>Mis datos personales</h3>
 		<table>
@@ -52,14 +54,14 @@
 			<input type="submit" value="Propuestas iniciadas" />
 		</form>
 		<form action="matchesReceived" method="get">
-			<input type="submit" value="Propuestas recibidas" />
+			<input type="submit" value="Propuestas recibidas (<%= quantity1 %>)" />
 		</form>
 		<form action="matchesPendingOther" method="get">
 			<input type="submit"
 				value="Propuestas respondidas, pendientes de otro" />
 		</form>
 		<form action="matchesPendingMe" method="get">
-			<input type="submit" value="Propuestas pendientes de mí" />
+			<input type="submit" value="Propuestas pendientes de mí  (<%= quantity2 %>)" />
 		</form>
 		<h3>Finalizadas</h3>
 		<form action="matchesCompleted" method="get">
