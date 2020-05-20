@@ -8,119 +8,121 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>OtherGame-Búsqueda</title>
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión">
-	<input type="button" onclick=" window.location.href='principal' "
-		value="Principal">
-	<input type="button" onclick=" window.location.href='myprofile' "
-		value="Mi perfil">
+	<div class='titulo'>
+		<input type="button" onclick=" window.location.href='logout' "
+			value="Cerrar sesión"> <input type="button"
+			onclick=" window.location.href='principal' " value="Principal">
+		<input type="button" onclick=" window.location.href='myprofile' "
+			value="Mi perfil">
 
-
-	<h1>OtherGame</h1>
-	<%
-		Users me = (Users) session.getAttribute("me");
-	%>
-	<p>
-		¿Qué estás buscando hoy,
-		<%=me.getPublicName()%>?
-	</p>
-
-	<%
-		String searchTxt = (String) request.getAttribute("searchTxt");
-	%>
-
-	<form method="get" action="search">
-		<input type="hidden" name="page" value="0"> <input type="text"
-			name="search" pattern="[A-Za-z0-9]{4,32}"
-			title="Se validan letras y números, escriba al menos 4 caracteres, y como mucho 32"
-			size="20" value=<%=searchTxt%> required> <input type="submit"
-			value="Buscar">
-	</form>
-
-	<p>¿Algo que ofrecer?</p>
-	<input type="button" onclick=" window.location.href='publish' "
-		value="Publicar un anuncio ">
-	<h2>
-		Resultados para:
-		<%=searchTxt%></h2>
-
-
-	<%
-		List<Ads> ads = (List<Ads>) request.getAttribute("searchedAds");
-	if (ads.size() < 1) {
-	%>
-	<p>No hay anuncios disponibles</p>
-	<%
-		} else {
-		int actualPage = (int) request.getAttribute("page");
-		int quantity = (int) request.getAttribute("quantitySearched");
-	%>
-	<p>
-		Mostrando resultados
-		<%=actualPage * 10 + 1%>
-		a
+		<h1>OtherGame</h1>
+	</div>
+	<div class='cuerpo'>
 		<%
-		if (quantity > actualPage * 10 + 1 + 9) {
-	%><%=(actualPage * 10 + 1 + 9)%>
+			Users me = (Users) session.getAttribute("me");
+		%>
+		<p>
+			¿Qué estás buscando hoy,
+			<%=me.getPublicName()%>?
+		</p>
+
+		<%
+			String searchTxt = (String) request.getAttribute("searchTxt");
+		%>
+
+		<form method="get" action="search">
+			<input type="hidden" name="page" value="0"> <input
+				type="text" name="search" pattern="[A-Za-z0-9]{4,32}"
+				title="Se validan letras y números, escriba al menos 4 caracteres, y como mucho 32"
+				size="20" value=<%=searchTxt%> required> <input
+				type="submit" value="Buscar">
+		</form>
+
+		<p>¿Algo que ofrecer?</p>
+		<input type="button" onclick=" window.location.href='publish' "
+			value="Publicar un anuncio ">
+		<h2>
+			Resultados para:
+			<%=searchTxt%></h2>
+
+
+		<%
+			List<Ads> ads = (List<Ads>) request.getAttribute("searchedAds");
+		if (ads.size() < 1) {
+		%>
+		<p>No hay anuncios disponibles</p>
 		<%
 			} else {
-		%><%=quantity%>
+			int actualPage = (int) request.getAttribute("page");
+			int quantity = (int) request.getAttribute("quantitySearched");
+		%>
+		<p>
+			Mostrando resultados
+			<%=actualPage * 10 + 1%>
+			a
+			<%
+			if (quantity > actualPage * 10 + 1 + 9) {
+		%><%=(actualPage * 10 + 1 + 9)%>
+			<%
+				} else {
+			%><%=quantity%>
+			<%
+				}
+			%>
+			de un total de
+			<%=quantity%>
+		</p>
+		<table>
+			<%
+				for (Ads ad : ads) {
+			%>
+			<div>
+				<form action="adView" method="get">
+					<input type="hidden" name="idAd" value=<%=ad.getId()%> />
+
+					<tr>
+						<td><%=ad.getNameAd()%></td>
+						<td><input type="submit" value="Ver" /></td>
+					</tr>
+
+				</form>
+			</div>
+			<%
+				}
+			%>
+		</table>
+
+		<%
+			if (actualPage != 0) {
+		%>
+		<form method="get" action="search">
+			<input type="hidden" name="page" value=<%=actualPage - 1%>> <input
+				type="hidden" name="search" value=<%=searchTxt%>> <input
+				type="submit" value="Anterior pág.">
+		</form>
 		<%
 			}
 		%>
-		de un total de
-		<%=quantity%>
-	</p>
-	<table>
 		<%
-			for (Ads ad : ads) {
+			if (quantity - (20 * actualPage) > 10) {
 		%>
-		<div>
-			<form action="adView" method="get">
-				<input type="hidden" name="idAd" value=<%=ad.getId()%> />
-
-				<tr>
-					<td><%=ad.getNameAd()%></td>
-					<td><input type="submit" value="Ver" /></td>
-				</tr>
-
-			</form>
-		</div>
+		<form method="get" action="search">
+			<input type="hidden" name="page" value=<%=actualPage + 1%>> <input
+				type="hidden" name="search" value=<%=searchTxt%>> <input
+				type="submit" value="Siguiente pág.">
+		</form>
 		<%
 			}
 		%>
-	</table>
-
-	<%
-		if (actualPage != 0) {
-	%>
-	<form method="get" action="search">
-		<input type="hidden" name="page" value=<%=actualPage - 1%>> <input
-			type="hidden" name="search" value=<%=searchTxt%>> <input
-			type="submit" value="Anterior pág.">
-	</form>
-	<%
-		}
-	%>
-	<%
-		if (quantity - (20 * actualPage) > 10) {
-	%>
-	<form method="get" action="search">
-		<input type="hidden" name="page" value=<%=actualPage + 1%>> <input
-			type="hidden" name="search" value=<%=searchTxt%>> <input
-			type="submit" value="Siguiente pág.">
-	</form>
-	<%
-		}
-	%>
-	<p>
-		Página:
-		<%=actualPage%></p>
-	<%
-		}
-	%>
-
+		<p>
+			Página:
+			<%=actualPage%></p>
+		<%
+			}
+		%>
+	</div>
 </body>
 </html>

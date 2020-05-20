@@ -28,8 +28,8 @@
 			<%=me.getPublicName()%>?
 		</p>
 
-		<form class='box' method="get" action="search">
-			<input type="hidden" name="page" value="0"> <input
+		<form method="get" action="search">
+			<input id='texto' type="hidden" name="page" value="0"> <input
 				type="text" name="search" pattern="[A-Za-z0-9]{4,32}"
 				placeholder='Escribe tu búsqueda'
 				title="Se validan letras y números, escriba al menos 4 caracteres, y como mucho 32"
@@ -73,17 +73,17 @@
 			<%
 				for (Ads ad : ads) {
 			%>
-			<div>
-				<form action="adView" method="get">
-					<input type="hidden" name="idAd" value=<%=ad.getId()%> />
 
-					<tr>
-						<td><%=ad.getNameAd()%></td>
-						<td><input type="submit" value="Ver" /></td>
-					</tr>
+			<tr>
+				<td><%=ad.getNameAd()%></td>
+				<td><div>
+						<form action="adView" method="get">
+							<input type="hidden" name="idAd" value=<%=ad.getId()%> /><input
+								type="submit" value="Ver" />
+						</form>
+					</div></td>
+			</tr>
 
-				</form>
-			</div>
 			<%
 				}
 			%>

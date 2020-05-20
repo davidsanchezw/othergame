@@ -3,20 +3,26 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>OtherGame-Pendiente</title>
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión">
-	<input type="button" onclick=" window.location.href='principal' "
-		value="Principal">
-	<input type="button" onclick=" window.location.href='myprofile' "
-		value="Mi perfil">
+	<div class='titulo'>
+		<input type="button" onclick=" window.location.href='logout' "
+			value="Cerrar sesión"> <input type="button"
+			onclick=" window.location.href='principal' " value="Principal">
+		<input type="button" onclick=" window.location.href='myprofile' "
+			value="Mi perfil">
 
-	<h1>Propuesta pendiente de confirmacion</h1>
-	<p>Puedes ver tus propuestas pendientees de confirmacion</p>
-	<form action="matchesPendingOther" method="get">
-		<input type="submit"
-			value="Propuestas respondidas, pendientes de otro" />
-	</form>
+		<h1>OtherGame</h1>
+	</div>
+	<div class='cuerpo'>
+		<h2>Propuesta pendiente de confirmacion</h2>
+		<p>Puedes ver tus propuestas pendientees de confirmacion</p>
+		<form action="matchesPendingOther" method="get">
+			<input type="submit"
+				value="Propuestas respondidas, pendientes de otro" />
+		</form>
+	</div>
+
 </body>
 </html>

@@ -3,19 +3,23 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>OthrGame-Aviso cancelado</title>
+<link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión">
-	<input type="button" onclick=" window.location.href='principal' "
-		value="Principal">
-	<input type="button" onclick=" window.location.href='myprofile' "
-		value="Mi perfil">
+	<div class='titulo'>
+		<input type="button" onclick=" window.location.href='logout' "
+			value="Cerrar sesión"> <input type="button"
+			onclick=" window.location.href='principal' " value="Principal">
+		<input type="button" onclick=" window.location.href='myprofile' "
+			value="Mi perfil">
 
-	<h1>Propuesta cancelada</h1>
-	<p>Puedes ver tus propuestas canceladas aqui</p>
-	<form action="matchesCancelled" method="get">
-		<input type="submit" value="Propuestas canceladas" />
-	</form>
+		<h1>Propuesta cancelada</h1>
+	</div>
+	<div class='cuerpo'>
+		<p>Puedes ver tus propuestas canceladas aqui</p>
+		<form action="matchesCancelled" method="get">
+			<input type="submit" value="Propuestas canceladas" />
+		</form>
+	</div>
 </body>
 </html>

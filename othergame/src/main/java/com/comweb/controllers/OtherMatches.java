@@ -42,18 +42,21 @@ public class OtherMatches extends HttpServlet {
 				// Obtengo otro usuario y lo seteo
 				int idUser = Integer.parseInt(request.getParameter("idUser"));
 				Users otherUser = userDb.getOtherUser(idUser);
-				request.setAttribute("otherUser", otherUser);
+				if (otherUser != null) {
+					request.setAttribute("otherUser", otherUser);
 
-				// Obtengo loas propuestas finalizadas y seteo
-				List<Matches> matches = (List<Matches>) matchDb.getEndedMatch(idUser, 3);
-				request.setAttribute("matches", matches);
-
+					// Obtengo loas propuestas finalizadas y seteo
+					List<Matches> matches = (List<Matches>) matchDb.getEndedMatch(idUser, 3);
+					request.setAttribute("matches", matches);
+					rd = request.getRequestDispatcher("otherMatches.jsp");
+					rd.forward(request, response);
+				} else
+					response.sendRedirect("error-usuario.html");
 			} catch (Exception e) {
 				e.printStackTrace();
 				response.sendRedirect("error-db.html");
 			}
-			rd = request.getRequestDispatcher("otherMatches.jsp");
-			rd.forward(request, response);
+
 		}
 	}
 

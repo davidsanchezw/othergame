@@ -2,20 +2,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
 
 </head>
 <html>
 <body>
-	<input type="button" onclick=" window.location.href='logout' "
-		value="Cerrar sesión">
-	<input type="button" onclick=" window.location.href='principal' "
-		value="Principal">
-	<input type="button" onclick=" window.location.href='myprofile' "
-		value="Mi perfil">
-	<h1>OtherGame</h1>
-	<h2>Error de autenticacion</h2>
-	<h3>Usuario o contraseña erróneos</h3>
-	<button type="button" onclick=" window.location.href='index.jsp' ">Intentarlo
-		de nuevo</button>
+	<div class='titulo'>
+		<input type="button" onclick=" window.location.href='logout' "
+			value="Cerrar sesión"> <input type="button"
+			onclick=" window.location.href='principal' " value="Principal">
+		<input type="button" onclick=" window.location.href='myprofile' "
+			value="Mi perfil">
+		<h1>OtherGame</h1>
+	</div>
+	<div class='cuerpo'>
+		<h2>Error de autenticacion</h2>
+		<h3>Usuario o contraseña erróneos</h3>
+		<input type="button" onclick=" window.location.href='index.jsp' "
+			value="Intentarlo de nuevo">
+	</div>
 </body>
 </html>
