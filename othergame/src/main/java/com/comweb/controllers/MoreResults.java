@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import com.comweb.conection.AdDBManager;
 import com.comweb.conection.DBManager;
+import com.comweb.conection.MatchDBManager;
 import com.comweb.model.Ads;
 import com.comweb.model.Users;
 
@@ -50,6 +51,14 @@ public class MoreResults extends HttpServlet {
 				request.setAttribute("principalAds", principalAds);
 				request.setAttribute("page", page);
 				request.setAttribute("quantity", adDb.getQuantity());
+				// Cantidad de tareas
+				MatchDBManager matchDb = new MatchDBManager(db);
+
+				int quantity1 = matchDb.quantity1(me.getId());
+				request.setAttribute("quantity1", quantity1);
+
+				int quantity2 = matchDb.quantity2(me.getId());
+				request.setAttribute("quantity2", quantity2);
 
 			} catch (SQLException e) {
 				e.printStackTrace();
